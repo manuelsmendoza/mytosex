@@ -4,8 +4,8 @@ mitochondrial genomes content.
 """
 
 import argparse as arg
-import os
 import yaml
+from misc.util import tnow
 
 __author__ = "Manuel Mendoza"
 __version__ = "0.1"
@@ -30,7 +30,8 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-# Load settings values
+# Load and check settings values
+print(tnow() + " INFO: Starting analysis")
 with open(args.settings[0], "r") as settings_file:
     try:
         settings = yaml.load(
@@ -40,4 +41,5 @@ with open(args.settings[0], "r") as settings_file:
     except ImportError:
         print("Settings file could not be loaded")
 
+print(tnow() + " INFO: Checking the settings values")
 print(settings)

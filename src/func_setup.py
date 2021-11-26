@@ -1,6 +1,6 @@
 import sys
 import os
-from src.func_util import tnow
+import yaml
 
 
 def check_dep(dep_name, dep_type):
@@ -35,7 +35,22 @@ def check_dep(dep_name, dep_type):
         return False
 
 
-def check_settings(set_file=os.getenv("MYTOSEX_SETTINGS")):
+def check_settings(set_file):
     """ Check the settings provided to perform the analysis
+    check_settings(settings.yaml)
 
+    Parameters
+    ----------
+    set_file: str
+        Path to the settings file in YAML format
+
+    Returns
+    -------
+    dict
+        A dictionary containing all the settings information
     """
+    if os.path.exists(set_file) and os.path.isfile(set_file) and os.access(set_file, os.R_OK):
+        with open(set_file) as set_values:
+            settings = yaml.load(set_values, Loader=yaml.FullLoader)
+    else:
+        raise FileNotFoundError("Check setting file")

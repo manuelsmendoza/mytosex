@@ -20,3 +20,8 @@ if not all(list(dep_res.values())):
         if not dep_res[dep]:
             print(tnow() + " FAIL: " + dep + " is not installed")
     raise ModuleNotFoundError
+
+# Checking the settings
+print(tnow() + " INFO: Checking the settings values")
+
+settings = check_settings(set_file=os.getenv("MYTOSEX_SETTINGS"))

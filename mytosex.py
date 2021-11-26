@@ -23,7 +23,6 @@ def main():
 
     # Check for the dependencies and settings values
     import chunks.setup
-    print(os.getenv("MYTOSEX_SETTINGS"))
 
 
 if __name__ == "__main__":

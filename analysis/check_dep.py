@@ -28,14 +28,12 @@ def check_depmod(module):
     path = site.getsitepackages()
     res = []
     for p in path:
-        res.append(os.path.exists(p + module))
+        res.append(os.path.exists(os.path.join(p, module)))
 
     if any(res):
         return True
     else:
         return False
-
-
 
 
 resmod = {}

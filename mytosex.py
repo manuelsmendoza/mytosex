@@ -3,7 +3,9 @@ MyToSex: In silico sex determination of bivalve with mitochondrial double unipar
 mitochondrial genomes content.
 """
 
+
 import argparse as arg
+import os
 
 __author__ = "Manuel Mendoza"
 __version__ = "0.1"
@@ -17,9 +19,12 @@ def main():
     parser.add_argument("-v", "--version", action="version", version=__version__, help="show the current version")
 
     args = parser.parse_args()
+    os.environ["MYTOSEX_SETTINGS"] = args[0]
 
-    # Check if the dependencies are installed
-    import analysis.setup
+    # Check for the dependencies and settings values
+    import chunks.setup
+    print(os.getenv("MYTOSEX_SETTINGS"))
+
 
 if __name__ == "__main__":
     main()

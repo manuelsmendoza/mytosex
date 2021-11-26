@@ -28,7 +28,8 @@ Mendoza M. and Canchaya A., MyToSex: Sexual inference based on mitochondrial gen
 
 Please, also include to:
 
-Langmead B, Salzberg SL. Fast gapped-read alignment with Bowtie2. *Nat Methods*. 2012;9(4):357-359.doi:[10.1038/nmeth.1923](https://www.nature.com/articles/nmeth.1923).
+Langmead B, Salzberg SL. Fast gapped-read alignment with Bowtie2. *Nat Methods*. 2012;9(4):357-359.
+doi:[10.1038/nmeth.1923](https://www.nature.com/articles/nmeth.1923).
 ```
 @article{langmead2012bowtie2, 
   title={Fast gapped-read alignment with Bowtie2},

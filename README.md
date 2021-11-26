@@ -19,7 +19,7 @@ tools works in two different acts:
 
 # Installation
 `MyToSex` is an open-source tools written in [Python3](https://www.python.org) that requires the following modules: 
-... Furthermore, it also calls third-party software.
+`PyYAML`. Furthermore, it also calls third-party software.
 
 # Citation
 If you only use `MyToSex` cite us as follows:

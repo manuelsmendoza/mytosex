@@ -18,8 +18,8 @@ tools works in two different acts:
       of reference and also adding information from other species.
 
 # Installation
-`MyToSex` is an open-source tools written in Python3 that requires the following modules: ... Furthermore, it also calls
-third-party software.
+`MyToSex` is an open-source tools written in [Python3](https://www.python.org) that requires the following modules: 
+... Furthermore, it also calls third-party software.
 
 # Citation
 

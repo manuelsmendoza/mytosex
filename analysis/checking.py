@@ -2,6 +2,7 @@
 Checking the parameters provided in the settings file
 """
 
+import sys
 from misc.util import tnow
 
 

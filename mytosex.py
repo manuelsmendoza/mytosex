@@ -22,7 +22,7 @@ def main():
     args = parser.parse_args()
 
     # Check if the dependencies are installed
-    from analysis.checking import check_depmod
+    from analysis.check_dep import check_depmod
 
 
 if __name__ == "__main__":

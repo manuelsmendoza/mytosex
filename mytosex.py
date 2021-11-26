@@ -19,7 +19,8 @@ def main():
     parser.add_argument("-v", "--version", action="version", version=__version__, help="show the current version")
 
     args = parser.parse_args()
-    os.environ["MYTOSEX_SETTINGS"] = args[0]
+    print(args)
+    #os.environ["MYTOSEX_SETTINGS"] = args[0]
 
     # Check for the dependencies and settings values
     import chunks.setup

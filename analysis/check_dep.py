@@ -43,4 +43,10 @@ modules_required = [
 ]
 for mod in modules_required:
     resmod.update({mod: check_depmod(mod)})
-print(resmod)
+
+if not all(list(resmod.values())):
+    print(tnow() + " FAIl: Some module is not installed. Please check the dependencies")
+    for k in list(resmod.keys()):
+        if not resmod[k]:
+            print(tnow() + " FAIL: " + k + " is not installed")
+    raise ModuleNotFoundError

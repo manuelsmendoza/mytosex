@@ -26,13 +26,12 @@ If you only use `MyToSex` cite us as follows:
 
 Mendoza M. and Canchaya A., MyToSex: Sexual inference based on mitochondrial genome content [...]
 
-And include to:
+Please, also include to:
 
-Langmead B, Salzberg SL. Fast gapped-read alignment with Bowtie2. *Nat Methods*. 2012;9(4):357-359. 
-doi:[10.1038/nmeth.1923](https://www.nature.com/articles/nmeth.1923).
+Langmead B, Salzberg SL. Fast gapped-read alignment with Bowtie2. *Nat Methods*. 2012;9(4):357-359.doi:[10.1038/nmeth.1923](https://www.nature.com/articles/nmeth.1923).
 ```
-@article{langmead2012fast,
-  title={Fast gapped-read alignment with Bowtie 2},
+@article{langmead2012bowtie2, 
+  title={Fast gapped-read alignment with Bowtie2},
   author={Langmead, Ben and Salzberg, Steven L},
   journal={Nature methods},
   volume={9},
@@ -47,7 +46,7 @@ Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMto
 2009;25(16):2078-2079. 
 doi:[10.1093/bioinformatics/btp352](https://academic.oup.com/bioinformatics/article/25/16/2078/204688).
 ```
-@article{li2009sequence,
+@article{li2009samtools,
   title={The sequence alignment/map format and SAMtools},
   author={Li, Heng and Handsaker, Bob and Wysoker, Alec and Fennell, Tim and Ruan, Jue and Homer, Nils and Marth, Gabor and Abecasis, Goncalo and Durbin, Richard},
   journal={Bioinformatics},

@@ -1,27 +1,47 @@
-"""
-    Add some information here
-"""
+import os
+import sys
 from src.func_setup import *
 from src.func_util import tnow
 
 # Checking for the dependencies
-print(tnow() + " INFO: Checking for the dependencies")
+print(tnow() + " INFO: Checking for the dependencies", file=sys.stdout)
 
-mod_name = ["yaml"]
+module_name = ["yaml"]
 tool_name = ["bowtie2"]
-dep_res = {}
-for dep in mod_name:
-    dep_res.update({dep: check_dep(dep_name=dep, dep_type="module")})
-for dep in tool_name:
-    dep_res.update({dep: check_dep(dep_name=dep, dep_type="tool")})
+detection = {}
+for dependency in module_name:
+    detection.update({dependency: check_dep(dependency, "module")})
+for dependency in tool_name:
+    detection.update({dependency: check_dep(dependency, "tool")})
 
-if not all(list(dep_res.values())):
-    for dep in list(dep_res.keys()):
-        if not dep_res[dep]:
-            print(tnow() + " FAIL: " + dep + " is not installed")
-    raise ModuleNotFoundError
+if not all(list(detection.values())):
+    for dependency in list(detection.keys()):
+        if not detection[dependency]:
+            print(tnow() + " FAIL: " + dependency + " is not installed", file=sys.stderr)
+    raise ModuleNotFoundError("Any module required is no installed")
 
 # Checking the settings
-print(tnow() + " INFO: Checking the settings values")
+print(tnow() + " INFO: Checking the settings values", file=sys.stdout)
+settings = check_settings(os.getenv("MYTOSEX_SETTINGS"))
 
-settings = check_settings(set_file=os.getenv("MYTOSEX_SETTINGS"))
+# Check the output directory
+if os.path.exists(settings["output_dir"]) and os.path.isdir(settings["output_dir"]):
+    print(tnow() + " WARN: Output directory already exists", file=sys.stdout)
+else:
+    try:
+        os.mkdir(settings["output_dir"])
+    except OSError:
+        print(tnow() + " FAIL: Creation of the directory %s failed " % settings["output_dir"], file=sys.stderr)
+    else:
+        print(tnow() + " INFO: The output will be store at %s " % settings["output_dir"], file=sys.stdout)
+
+# Creating subdirectories
+subdir_names = ["reads", "reference", "tmp", "data", "figures"]
+for subdirectory in [os.path.join(settings["output_dir"], subdir) for subdir in subdir_names]:
+    if not os.path.exists(subdirectory):
+        try:
+            os.mkdir(subdirectory)
+        except OSError:
+            print(tnow() + " FAIL: Creation of the directory %s failed " % subdirectory, file=sys.stderr)
+
+print(settings)

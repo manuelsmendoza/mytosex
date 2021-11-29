@@ -1,12 +1,12 @@
 """
 Some useful functions:
-    - tnow: Show the current time
+    - tnow(): Show the current time
 """
 
 import datetime as dt
 
 
-def tnow(format="%d %b %Y %H:%M:%S %Z"):
+def tnow(time_format="%d %b %Y %H:%M:%S %Z"):
     """
     tnow(format)
 
@@ -14,7 +14,7 @@ def tnow(format="%d %b %Y %H:%M:%S %Z"):
 
     Parameters
     ----------
-    format: str, optional
+    time_format: str, optional
         Format to print the time
 
     Returns
@@ -31,6 +31,6 @@ def tnow(format="%d %b %Y %H:%M:%S %Z"):
     --------
     tnow()
     """
-    ctime = "[" + dt.datetime.now().strftime(format) + "]"
+    ctime = "[" + dt.datetime.now().strftime(time_format) + "]"
     ctime = ctime.replace(" ]", "]")
     return ctime

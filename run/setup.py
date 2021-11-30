@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from src.func_setup import *
 from src.func_util import tnow
 
@@ -44,4 +45,13 @@ for subdirectory in [os.path.join(settings["output_dir"], subdir) for subdir in 
         except OSError:
             print(tnow() + " FAIL: Creation of the directory %s failed " % subdirectory, file=sys.stderr)
 
-print(settings)
+# Export the values of the configuration
+with open(os.path.join(settings["output_dir"], "settings.json"), "w") as settings_out:
+    json.dump(settings, settings_out)
+
+# Change the configuration path
+os.environ["MYTOSEX_SETTINGS"] = os.path.join(settings["output_dir"], "settings.json")
+
+# Create a milestone
+open(os.path.join(settings["output_dir"], ".settings.ok"), "w").close()
+print(tnow() + " INFO: Settings values checked correctly", file=sys.stdout)

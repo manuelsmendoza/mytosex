@@ -44,20 +44,20 @@ Please, also include to:
     ```
 
 - Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMtools. *Bioinformatics*. 
-2009;25(16):2078-2079. 
-doi:[10.1093/bioinformatics/btp352](https://academic.oup.com/bioinformatics/article/25/16/2078/204688).
-```
-@article{li2009samtools,
-  title={The sequence alignment/map format and SAMtools},
-  author={Li, Heng and Handsaker, Bob and Wysoker, Alec and Fennell, Tim and Ruan, Jue and Homer, Nils and Marth, Gabor and Abecasis, Goncalo and Durbin, Richard},
-  journal={Bioinformatics},
-  volume={25},
-  number={16},
-  pages={2078--2079},
-  year={2009},
-  publisher={Oxford University Press}
-}
-```
+    2009;25(16):2078-2079. 
+    doi:[10.1093/bioinformatics/btp352](https://academic.oup.com/bioinformatics/article/25/16/2078/204688).
+    ```
+    @article{li2009samtools,
+      title={The sequence alignment/map format and SAMtools},
+      author={Li, Heng and Handsaker, Bob and Wysoker, Alec and Fennell, Tim and Ruan, Jue and Homer, Nils and Marth, Gabor and Abecasis, Goncalo and Durbin, Richard},
+      journal={Bioinformatics},
+      volume={25},
+      number={16},
+      pages={2078--2079},
+      year={2009},
+      publisher={Oxford University Press}
+    }
+    ```
 
 If you also perform the supporting analysis, please cite them too.
 - Samples clustering:

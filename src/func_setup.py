@@ -276,5 +276,20 @@ def check_settings(settings_file):
                         elif check_accession(reference, "Nucleotide"):
                             settings["other_spp"][specie].update({mt_type + "_ncbi": True})
 
+    # Add new item to download the sequences or reads
+    ncbi_seqs = []
+    for mt_type in ["mt", "mtf", "mtm"]:
+        if mt_type in list(settings["reference"].keys()):
+            ncbi_seqs.append(settings["reference"][mt_type + "_ncbi"])
+        for specie in list(settings["other_spp"].keys()):
+            if mt_type in list(settings["other_spp"][specie].keys()):
+                ncbi_seqs.append(settings["other_spp"][specie][mt_type + "_ncbi"])
+
+    ncbi_reads = []
+    for sample in list(settings["samples"].keys()):
+        ncbi_reads.append(settings["samples"][sample]["ncbi"])
+
+    settings.update({"from_ncbi": {"seqs": any(ncbi_seqs), "reads": any(ncbi_reads)}})
+
     # Return the new settings values
     return settings

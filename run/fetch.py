@@ -18,16 +18,8 @@ if settings["from_ncbi"]["seqs"]:
             print(tnow() + " INFO: Downloading the " + mt_type + " of reference", file=sys.stdout)
             alias = settings["reference"]["alias"] + "_" + mt_type
             record = annotate(fetch_sequence(settings["reference"][mt_type]), alias)
+            export_record(record, tmp_dir, alias)
 
-            with open(os.path.join(tmp_dir, alias + "_" + mt_type + ".fasta"), "w") as out_sequence:
-                SeqIO.write(record["sequence"], out_sequence, "fasta")
-            out_sequence.close()
-
-            out_annotation = os.path.join(tmp_dir, alias + "_" + mt_type + ".gff")
-            record["annotation"].to_csv(out_annotation, sep="\t", header=False, index=False)
-
-            out_coordinates = os.path.join(tmp_dir, alias + "_" + mt_type + ".bed")
-            record["coordinates"].to_csv(out_coordinates, sep="\t", header=False, index=False)
     for mt_type in ["mt", "mtf", "mtm"]:
         for specie in list(settings["other_spp"].keys()):
             if mt_type in list(settings["other_spp"][specie].keys()):
@@ -36,16 +28,8 @@ if settings["from_ncbi"]["seqs"]:
                     print(tnow() + " INFO: Downloading the " + mt_type + " of " + specie_name, file=sys.stdout)
                     alias = specie_name + "_" + mt_type
                     record = annotate(fetch_sequence(settings["other_spp"][specie][mt_type]), alias)
+                    export_record(record, tmp_dir, alias)
 
-                    with open(os.path.join(tmp_dir, alias + ".fasta"), "w") as out_sequence:
-                        SeqIO.write(record["sequence"], out_sequence, "fasta")
-                    out_sequence.close()
-
-                    out_annotation = os.path.join(tmp_dir, alias + ".gff")
-                    record["annotation"].to_csv(out_annotation, sep="\t", header=False, index=False)
-
-                    out_coordinates = os.path.join(tmp_dir, alias + ".bed")
-                    record["coordinates"].to_csv(out_coordinates, sep="\t", header=False, index=False)
 
 # Download the samples reads
 if settings["from_ncbi"]["reads"]:

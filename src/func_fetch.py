@@ -1,3 +1,5 @@
+import os.path
+
 import pandas as pd
 import subprocess as sp
 from Bio import Entrez
@@ -153,7 +155,13 @@ def annotate(record, alias):
     )
     annotation.replace(
         {"attribute": [r"ID=NAD", r"ID=nad"]},
-        {"attribute": [r"ND", r"ND"]},
+        {"attribute": [r"ID=ND", r"ID=ND"]},
+        regex=True,
+        inplace=True
+    )
+    annotation.replace(
+        {"attribute": [r"ID=ND4l"]},
+        {"attribute": [r"ID=ND4L"]},
         regex=True,
         inplace=True
     )
@@ -252,3 +260,25 @@ def compress_file(file, threads):
         shell=True,
         capture_output=True
     )
+
+
+def export_record(sequence_info, outdir, alias):
+    """ Export the sequence, its annotation and the features coordinates
+
+    Parameters
+    ----------
+    sequence_info : dict
+        Sequence information fetched from the NCBI
+    outdir : str
+        Directory to write the information
+    alias : str
+        A human-friendly name to use to handle the samples information
+    """
+    # Export the sequence
+    with open(os.path.join(outdir, alias + ".fasta"), "w") as out_sequence:
+        SeqIO.write(sequence_info["sequence"], out_sequence, "fasta")
+    out_sequence.close()
+
+    # Export the annotation and the features coordinates
+    sequence_info["annotation"].to_csv(os.path.join(outdir, alias + ".gff"), sep="\t", header=False, index=False)
+    sequence_info["coordinates"].to_csv(os.path.join(outdir, alias + ".bed"), sep="\t", header=False, index=False)

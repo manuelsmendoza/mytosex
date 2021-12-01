@@ -22,14 +22,27 @@ def main():
     args = parser.parse_args()
     os.environ["MYTOSEX_SETTINGS"] = os.path.abspath(args.settings[0])
 
-    # Check for the dependencies and settings values
+    # Common values
     output_dir = os.path.join(load_settings(os.path.abspath(args.settings[0]))["output_dir"], "mytosex_result")
+    settings_checked = os.path.join(output_dir, "settings.json")
+
+    print(tnow() + " INFO: Starting mitochondrial analysis", file=sys.stdout)
+
+    # Check for the dependencies and settings values
     if not check_dir(output_dir) and not check_file(os.path.join(output_dir, ".settings.ok")):
         import run.setup
     elif check_dir(output_dir) and not check_file(os.path.join(output_dir, ".settings.ok")):
         import run.setup
     else:
-        print(tnow() + " INFO: Settings checked previously", file=sys.stdout)
+        os.environ["MYTOSEX_SETTINGS"] = settings_checked
+        print(tnow() + " WARN: Settings checked previously", file=sys.stdout)
+
+    # Download the reads and sequences (if needed)
+    settings = load_settings(settings_checked)
+    if any(list(settings["from_ncbi"].values())) and not check_file(os.path.join(output_dir, ".download.ok")):
+        import run.fetch
+    elif any(list(settings["from_ncbi"].values())) and check_file(os.path.join(output_dir, ".download.ok")):
+        print("Bullshit")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,8 @@
 """
 Some useful functions:
     - tnow(): Show the current time
+    - check_file: Check if a file exists and is readable by the USER
+    - check_dir: Check if a directory exists and is writeable by the USER
 """
 
 import datetime as dt

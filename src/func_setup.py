@@ -156,9 +156,19 @@ def check_settings(settings_file):
             True if the sequence and its annotation is avaible
         """
         if check_file(sequence) and any([check_file(os.path.splitext(sequence)[0] + ext) for ext in [".gff", ".gtf"]]):
-            return True
+            annotation = True
         else:
             raise FileNotFoundError("Reference annotation missed")
+
+        if check_file(sequence) and check_file(os.path.splitext(sequence)[0] + ".bed"):
+            coordinates = True
+        else:
+            raise FileNotFoundError("Reference features coordinates nro found")
+
+        if annotation and coordinates:
+            return True
+        else:
+            raise FileNotFoundError("Reference information missed")
 
     def check_accession(accession, ncbi_database):
         """ Verify if an accession number is correct

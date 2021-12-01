@@ -42,7 +42,7 @@ def main():
     if any(list(settings["from_ncbi"].values())) and not check_file(os.path.join(output_dir, ".download.ok")):
         import run.fetch
     elif any(list(settings["from_ncbi"].values())) and check_file(os.path.join(output_dir, ".download.ok")):
-        print("Bullshit")
+        print(tnow() + " WARN: Samples reads and mitogenomes downloaded previously", file=sys.stdout)
 
 
 if __name__ == "__main__":

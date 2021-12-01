@@ -36,18 +36,12 @@ if settings["from_ncbi"]["reads"]:
     for sample in list(settings["samples"].keys()):
         if settings["samples"][sample]["ncbi"]:
             print(tnow() + " INFO: Downloading the reads of " + settings["samples"][sample]["alias"], file=sys.stdout)
-            fetch_reads(settings["samples"][sample]["accession"], tmp_dir, settings["numb_threads"])
-
-            if settings["samples"][sample]["layout"] == "paired":
-                for strand in ["1", "2"]:
-                    old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + "_" + strand + ".fastq")
-                    new_name = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_" + strand + ".fastq")
-                    os.rename(old_name, new_name)
-                    compress_file(new_name, settings["numb_threads"])
-            else:
-                old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + ".fastq")
-                new_name = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fastq")
-                os.rename(old_name, new_name)
-                compress_file(new_name, settings["numb_threads"])
+            fetch_reads(
+                settings["samples"][sample]["accession"],
+                tmp_dir,
+                settings["samples"][sample]["alias"],
+                settings["samples"][sample]["layout"],
+                settings["numb_threads"]
+            )
 
 open(os.path.join(settings["output_dir"], ".download.ok"), "w").close()

@@ -7,7 +7,7 @@ from Bio import SeqIO
 from Bio import SeqRecord
 
 
-def fetch_reads(accession, outdir, threads=1):
+def fetch_reads(accession, outdir, alias, layout, threads=1):
     """ Download reads from the NCBI SRA database
     fetch_reads(accession, /path/reads_dir)
 
@@ -17,9 +17,34 @@ def fetch_reads(accession, outdir, threads=1):
         The sample accession number in the NCBI SRA database
     outdir : str
         Directory to store the reads
+    alias : str
+        A user-friendly name to handle the samples
+    layout : str {single, paired}
+        Sequencing layout
     threads : int
         Number of threads to download the sample in parallel
     """
+    def compress_file(file, threads):
+        """ Compress a file
+
+        Parameters
+        ----------
+        file : str
+            Path to the file to compress
+        threads : int
+            Number of threads to use for the compression
+        """
+        cmd = "pigz " \
+              + "--best " \
+              + "--force " \
+              + "--processes " + str(threads) + " " \
+              + file
+        out = sp.run(
+            cmd,
+            shell=True,
+            capture_output=True
+        )
+
     cmd = "fasterq-dump " \
           + "--split-files " \
           + "--outdir " + outdir + " " \
@@ -31,6 +56,20 @@ def fetch_reads(accession, outdir, threads=1):
         shell=True,
         capture_output=True
     )
+
+    if layout == "paired":
+        for strand in ["1", "2"]:
+            os.rename(
+                os.path.join(outdir, accession + "_" + strand + ".fastq"),
+                os.path.join(outdir, alias + "_" + strand + ".fastq")
+            )
+            compress_file(os.path.join(outdir, alias + "_" + strand + ".fastq"), threads)
+    else:
+        os.rename(
+            os.path.join(outdir, accession + ".fastq"),
+            os.path.join(outdir, alias + ".fastq")
+        )
+        compress_file(os.path.join(outdir, alias + ".fastq"), threads)
 
 
 def fetch_sequence(accession):
@@ -238,28 +277,6 @@ def annotate(record, alias):
         "coordinates": coordinates
     }
     return result
-
-
-def compress_file(file, threads):
-    """ Compress a file
-
-    Parameters
-    ----------
-    file : str
-        Path to the file to compress
-    threads : int
-        Number of threads to use for the compression
-    """
-    cmd = "pigz " \
-          + "--best " \
-          + "--force " \
-          + "--processes " + str(threads) + " " \
-          + file
-    out = sp.run(
-        cmd,
-        shell=True,
-        capture_output=True
-    )
 
 
 def export_record(sequence_info, outdir, alias):

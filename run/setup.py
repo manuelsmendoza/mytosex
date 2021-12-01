@@ -7,7 +7,7 @@ from src.func_util import tnow
 # Checking for the dependencies
 print(tnow() + " INFO: Checking for the dependencies", file=sys.stdout)
 
-module_name = ["yaml", "Bio"]
+module_name = ["yaml", "Bio", "pandas"]
 tool_name = ["fasterq-dump", "pigz", "bowtie2"]
 detection = {}
 for dependency in module_name:

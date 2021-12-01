@@ -56,12 +56,12 @@ if settings["from_ncbi"]["reads"]:
 
             if settings["samples"][sample]["layout"] == "paired":
                 for strand in ["1", "2"]:
-                    old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + "." + strand)
+                    old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + "_" + strand + ".fastq")
                     new_name = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_" + strand + ".fastq")
                     os.rename(old_name, new_name)
                     compress_file(new_name, settings["numb_threads"])
             else:
-                old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + ".1")
+                old_name = os.path.join(tmp_dir, settings["samples"][sample]["accession"] + ".fastq")
                 new_name = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fastq")
                 os.rename(old_name, new_name)
                 compress_file(new_name, settings["numb_threads"])

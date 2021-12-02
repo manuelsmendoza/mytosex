@@ -70,3 +70,75 @@ def reads_align(index, alias, outdir, threads, freads=None, rreads=None, sreads=
         shell=True,
         capture_output=True
     )
+
+
+def filter_alignment(alignment, threads, layout, require=None, exclude=None):
+    """ Filter reads alignment and mark duplications
+
+    Parameters
+    ----------
+    alignment : str
+        Path to the raw alignment
+    threads : int
+        Number of threads to use for filtering the alignments
+    layout : str
+        Sequencing layout
+    require : int
+        Flags required for the alignments
+    exclude : int
+        Flags to exclude the alignments
+    """
+    if not os.path.exists(alignment):
+        raise FileNotFoundError("Alignment file not found")
+    elif os.path.exists(alignment) and not os.access(alignment, os.R_OK):
+        raise PermissionError("Permission denied to read the alignment")
+
+    if layout == "paired" and require is None:
+        require = 3
+    elif layout == "single" and require is None:
+        require = 1
+
+    if layout == "paired" and exclude is None:
+        exclude = 1804
+    if layout == "single" and exclude is None:
+        exclude = 1796
+
+    sample_prefix = os.path.splitext(alignment)[0]
+    filter_mapped = "samtools view " \
+                    + "--bam " \
+                    + "--fast " \
+                    + "--output " + sample_prefix + ".bam" + " " \
+                    + "--min-MQ 30 " \
+                    + "--excl-flags " + str(exclude) + " " \
+                    + "--require-flags " + str(require) + " " \
+                    + "--threads " + str(threads) + " " \
+                    + "--output  " + sample_prefix + ".filtered.bam" \
+                    + alignment
+    group_names = "samtools collate " \
+                  + "--threads " + str(threads) + " " \
+                  + "-o " + sample_prefix + ".collate.bam " \
+                  + sample_prefix + ".filtered.bam"
+    fixmate = "samtools fixmate " \
+              + "-r " \
+              + "-m " \
+              + "-O bam " \
+              + "--threads " + str(threads) + " " \
+              + sample_prefix + ".collate.bam " \
+              + sample_prefix + ".fixmate.bam"
+    sort_position = "samtools sort " \
+                    + "-O bam " \
+                    + "-@ " + str(threads) + " " \
+                    + "-o " + sample_prefix + ".sort.bam" + " " \
+                    + sample_prefix + ".fixmate.bam"
+    deduplicate = "samtools markdup " \
+                  + "-r " \
+                  + "-S " \
+                  + "--threads " + str(threads) + " " \
+                  + sample_prefix + ".fixmate.bam " \
+                  + sample_prefix + ".bam"
+    for cmd in [filter_mapped, group_names, fixmate, sort_position, deduplicate]:
+        out = sp.run(
+            cmd,
+            shell=True,
+            capture_output=True
+        )

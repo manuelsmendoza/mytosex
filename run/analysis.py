@@ -33,3 +33,57 @@ build_index(
     os.path.join(tmp_dir, settings["reference"]["alias"]),
     settings["numb_threads"]
 )
+
+# Align the samples
+for sample in list(settings["samples"].keys()):
+    print(tnow() + " INFO: Aligning the reads of " + settings["samples"][sample]["alias"])
+    if settings["samples"][sample]["layout"] == "paired" and settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            freads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_1.fastq.gz"),
+            rreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_2.fastq.gz")
+        )
+    elif settings["samples"][sample]["layout"] == "paired" and not settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            freads=settings["samples"][sample]["forward"],
+            rreads=settings["samples"][sample]["reverse"]
+        )
+    elif settings["samples"][sample]["layout"] == "single" and settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            sreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fastq.gz")
+        )
+    elif settings["samples"][sample]["layout"] == "single" and not settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            sreads=settings["samples"][sample]["single"]
+        )
+
+# Filter the alignments
+for sample in list(settings["samples"].keys()):
+    print(tnow() + " INFO: Filtering the reads alignments of " + settings["samples"][sample]["alias"])
+    if settings["samples"][sample]["layout"] == "paired":
+        filter_alignment(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
+            threads=settings["numb_threads"],
+            layout="paired"
+        )
+    elif settings["samples"][sample]["layout"] == "single":
+        filter_alignment(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
+            threads=settings["numb_threads"],
+            layout="single"
+        )

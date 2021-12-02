@@ -303,3 +303,22 @@ def check_settings(settings_file):
 
     # Return the new settings values
     return settings
+
+
+def pass_file(in_file, out_file):
+    """ Pass the contents of a file to another one
+    pass_file(/path/file_1, /path/file_2)
+
+    Parameters
+    ----------
+    in_file : str
+        File containing the information
+    out_file : str
+        File to store the information
+    """
+    with open(out_file, "a") as hand_out:
+        with open(in_file, "r") as hand_in:
+            for line in hand_in.readlines():
+                hand_out.writelines(line)
+        hand_in.close()
+    hand_out.close()

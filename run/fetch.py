@@ -9,7 +9,6 @@ from src.func_util import tnow
 # Load settings
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
 tmp_dir = os.path.join(settings["output_dir"], "tmp")
-reference_dir = os.path.join(settings["output_dir"], "reference")
 
 # Download the sequences and export them together with the annotation and features coordinates
 if settings["from_ncbi"]["seqs"]:

@@ -29,7 +29,7 @@ def main():
     print(tnow() + " INFO: Starting mitochondrial analysis", file=sys.stdout)
 
     # Check for the dependencies and settings values
-    if not check_dir(output_dir) and not check_file(os.path.join(output_dir, ".settings.ok")):
+    if not check_dir(output_dir):
         import run.setup
     elif check_dir(output_dir) and not check_file(os.path.join(output_dir, ".settings.ok")):
         import run.setup
@@ -43,6 +43,13 @@ def main():
         import run.fetch
     elif any(list(settings["from_ncbi"].values())) and check_file(os.path.join(output_dir, ".download.ok")):
         print(tnow() + " WARN: Samples reads and mitogenomes downloaded previously", file=sys.stdout)
+
+    # Perform the analysis
+    if not check_file(os.path.join(output_dir, ".analysis.ok")):
+        import run.analysis
+    else:
+        print(tnow() + " WARN: Analysis done", file=sys.stdout)
+        sys.exit()
 
 
 if __name__ == "__main__":

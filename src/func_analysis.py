@@ -31,23 +31,28 @@ def build_index(sequence, index, threads):
 def reads_align(index, alias, outdir, threads, freads=None, rreads=None, sreads=None):
     """ Align reads to a reference using bowtie2
 
-    :param index: Reference index
-    :param alias: Sample alias
-    :param outdir: Directory to store the alignment
-    :param threads: Number of threads to use
-    :param freads: Forward reads, is paired-end
-    :param rreads: Reverse reads, if paired-end
-    :param sreads: Reads, if single-end
+    Parameters
+    ----------
+    index : str
+        Path to the sequence index
+    alias : str
+        A human-fiendly name to call the reference
+    outdir : str
+        Path to the directory to write the alignments
+    threads : int
+        Number of threads to use
+    freads : str
+        Path to the forward reads if the layout is paired-end
+    rreads : str
+        Path to the reverse reads if the layout is paired-end
+    sreads : str
+        Path to the reads if the layout is single-end
     """
     if freads is not None and rreads is not None and sreads is None:
         cmd = "bowtie2 " \
               + "--threads " + str(threads) + " " \
               + "--end-to-end " \
               + "--very-sensitive " \
-              + "--no-mixed " \
-              + "--no-discordant " \
-              + "--no-unal " \
-              + "--al-conc-gz " + os.path.join(outdir, alias) + " " \
               + "-x " + index + " " \
               + "-1 " + freads + " " \
               + "-2 " + rreads + " " \
@@ -57,14 +62,9 @@ def reads_align(index, alias, outdir, threads, freads=None, rreads=None, sreads=
               + "--threads " + str(threads) + " " \
               + "--end-to-end " \
               + "--very-sensitive " \
-              + "--no-unal " \
-              + "--al-gz " + os.path.join(outdir, alias) + " " \
               + "-x " + index + " " \
               + "-U " + sreads + " " \
               + "-S " + os.path.join(outdir, alias + ".sam")
-    else:
-        print(tnow() + " FAIL: Wrong layout")
-        raise ValueError("Forward and reverse reads are not compatible with single-end sequence samples")
     out = sp.run(
         cmd,
         shell=True,

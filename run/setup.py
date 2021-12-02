@@ -37,7 +37,7 @@ else:
         print(tnow() + " INFO: The output will be store at %s " % settings["output_dir"], file=sys.stdout)
 
 # Creating subdirectories
-subdir_names = ["reads", "reference", "tmp", "data", "figures"]
+subdir_names = ["tmp", "data", "figures"]
 for subdirectory in [os.path.join(settings["output_dir"], subdir) for subdir in subdir_names]:
     if not os.path.exists(subdirectory):
         try:

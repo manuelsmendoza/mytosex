@@ -2,6 +2,7 @@ import numpy as np
 import os
 import pandas as pd
 import subprocess as sp
+import sys
 
 
 def build_index(sequence, index, threads):
@@ -125,7 +126,7 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
     sort_position = "samtools sort " \
                     + "-O bam " \
                     + "-@ " + str(threads) + " " \
-                    + "-o " + sample_prefix + ".sort.bam" + " " \
+                    + "-o " + sample_prefix + ".sort.bam " \
                     + sample_prefix + ".fixmate.bam"
     deduplicate = "samtools markdup " \
                   + "-r " \
@@ -134,9 +135,9 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
                   + sample_prefix + ".fixmate.bam " \
                   + sample_prefix + ".bam"
     for cmd in [filter_mapped, group_names, fixmate, sort_position, deduplicate]:
+        print(cmd, file=sys.stdout)
         out = sp.run(
             cmd,
             shell=True,
             capture_output=True
         )
-        print(out)

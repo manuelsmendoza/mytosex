@@ -120,7 +120,11 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
             require = 1
         if exclude is None:
             exclude = 1796
-
+    compress_alignment = "samtools view " \
+                         + "--output-fmt BAM " \
+                         + "-@ " + str(threads) + " " \
+                         + "-o  " + sample_prefix + ".bam " \
+                         + alignment
     filter_mapped = "samtools view " \
                     + "--output-fmt BAM " \
                     + "-q 30 " \
@@ -143,11 +147,12 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
                   + "-r " \
                   + "-S " \
                   + "--threads " + str(threads) + " " \
-                  + sample_prefix + ".fixmate.bam " \
-                  + sample_prefix + ".bam"
-    for cmd in [filter_mapped, group_names, fixmate, sort_position, deduplicate]:
+                  + sample_prefix + ".sort.bam " \
+                  + sample_prefix + ".markdup.bam"
+    for cmd in [compress_alignment, filter_mapped, group_names, fixmate, sort_position, deduplicate]:
         out = sp.run(
             cmd,
             shell=True,
             capture_output=True
         )
+    os.remove(alignment)

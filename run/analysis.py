@@ -27,12 +27,12 @@ for ext in [".fasta", ".gff", ".bed"]:
             )
 
 # Build the sequence index
-print(tnow() + " INFO: Building the reference index", file=sys.stdout)
-build_index(
-    os.path.join(tmp_dir, settings["reference"]["alias"] + ".fasta"),
-    os.path.join(tmp_dir, settings["reference"]["alias"]),
-    settings["numb_threads"]
-)
+# print(tnow() + " INFO: Building the reference index", file=sys.stdout)
+# build_index(
+#     os.path.join(tmp_dir, settings["reference"]["alias"] + ".fasta"),
+#     os.path.join(tmp_dir, settings["reference"]["alias"]),
+#     settings["numb_threads"]
+# )
 
 # Align the samples
 # for sample in list(settings["samples"].keys()):

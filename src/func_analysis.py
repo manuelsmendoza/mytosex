@@ -81,7 +81,7 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
         Path to the raw alignment
     threads : int
         Number of threads to use for filtering the alignments
-    layout : str
+    layout : str {single, paired}
         Sequencing layout
     require : int
         Flags required for the alignments
@@ -139,3 +139,4 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
             shell=True,
             capture_output=True
         )
+        print(out)

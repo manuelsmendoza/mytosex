@@ -94,34 +94,46 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
     elif os.path.exists(alignment) and not os.access(alignment, os.R_OK):
         raise PermissionError("Permission denied to read the alignment")
 
-    if layout == "paired" and require is None:
-        require = 3
-        exclude = 1804
-    elif layout == "single" and require is None:
-        require = 1
-        exclude = 1796
-
     sample_prefix = os.path.splitext(alignment)[0]
+    if layout == "paired":
+        fixmate = "samtools fixmate " \
+                  + "-r " \
+                  + "-m " \
+                  + "-O bam " \
+                  + "--threads " + str(threads) + " " \
+                  + sample_prefix + ".collate.bam " \
+                  + sample_prefix + ".fixmate.bam"
+        if require is None:
+            require = 3
+        elif exclude is None:
+            exclude = 1804
+    elif layout == "single" and require is None:
+        fixmate = "samtools fixmate " \
+                  + "-r " \
+                  + "-m " \
+                  + "-p " \
+                  + "-O bam " \
+                  + "--threads " + str(threads) + " " \
+                  + sample_prefix + ".collate.bam " \
+                  + sample_prefix + ".fixmate.bam"
+        if require is None:
+            require = 1
+        elif exclude is None:
+            exclude = 1796
+
     filter_mapped = "samtools view " \
-                    + "--bam " \
-                    + "--fast " \
-                    + "--min-MQ 30 " \
-                    + "--excl-flags " + str(exclude) + " " \
-                    + "--require-flags " + str(require) + " " \
-                    + "--threads " + str(threads) + " " \
-                    + "--output  " + sample_prefix + ".filtered.bam " \
+                    + "--output-fmt BAM " \
+                    + "-q 30 " \
+                    + "-F " + str(exclude) + " " \
+                    + "-f " + str(require) + " " \
+                    + "-@ " + str(threads) + " " \
+                    + "-o  " + sample_prefix + ".filtered.bam " \
                     + alignment
     group_names = "samtools collate " \
-                  + "--threads " + str(threads) + " " \
+                  + "--output-fmt BAM " \
+                  + "-@ " + str(threads) + " " \
                   + "-o " + sample_prefix + ".collate.bam " \
                   + sample_prefix + ".filtered.bam"
-    fixmate = "samtools fixmate " \
-              + "-r " \
-              + "-m " \
-              + "-O bam " \
-              + "--threads " + str(threads) + " " \
-              + sample_prefix + ".collate.bam " \
-              + sample_prefix + ".fixmate.bam"
     sort_position = "samtools sort " \
                     + "-O bam " \
                     + "-@ " + str(threads) + " " \

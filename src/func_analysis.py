@@ -95,12 +95,9 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
 
     if layout == "paired" and require is None:
         require = 3
+        exclude = 1804
     elif layout == "single" and require is None:
         require = 1
-
-    if layout == "paired" and exclude is None:
-        exclude = 1804
-    if layout == "single" and exclude is None:
         exclude = 1796
 
     sample_prefix = os.path.splitext(alignment)[0]

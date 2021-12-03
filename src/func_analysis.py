@@ -134,8 +134,10 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
                   + sample_prefix + ".fixmate.bam " \
                   + sample_prefix + ".bam"
     for cmd in [filter_mapped, group_names, fixmate, sort_position, deduplicate]:
+        print(cmd)
         out = sp.run(
             cmd,
             shell=True,
             capture_output=True
         )
+        print(out)

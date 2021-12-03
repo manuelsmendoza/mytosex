@@ -105,12 +105,11 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
     filter_mapped = "samtools view " \
                     + "--bam " \
                     + "--fast " \
-                    + "--output " + sample_prefix + ".bam" + " " \
                     + "--min-MQ 30 " \
                     + "--excl-flags " + str(exclude) + " " \
                     + "--require-flags " + str(require) + " " \
                     + "--threads " + str(threads) + " " \
-                    + "--output  " + sample_prefix + ".filtered.bam" \
+                    + "--output  " + sample_prefix + ".filtered.bam " \
                     + alignment
     group_names = "samtools collate " \
                   + "--threads " + str(threads) + " " \

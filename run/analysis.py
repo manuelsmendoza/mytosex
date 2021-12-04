@@ -89,12 +89,26 @@ for sample in list(settings["samples"].keys()):
     #     )
 
     print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    extract_stats(
-        alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
-        features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
-        threads=settings["numb_threads"]
-    )
-    # alignment_stats(
-    #     coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "")
+    # extract_stats(
+    #     alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+    #     features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
+    #     threads=settings["numb_threads"]
     # )
-    #alignment_stats(coverage, feat_coverage, depth, salias, ralias)
+
+    metrics_list = list()
+    metrics_list.append(
+        alignment_stats(
+            coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),
+            feat_coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".bedcov.tsv"),
+            depth=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".depth.tsv"),
+            salias=settings["samples"][sample]["alias"],
+            ralias=settings["reference"]["alias"]
+        )
+    )
+    metrics_data = pd.concat(metrics_list)
+    metrics_data.to_csv(
+        os.path.join(data_dir, "align_stats.tsv"),
+        sep="\t",
+        index=False
+    )
+

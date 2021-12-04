@@ -72,7 +72,7 @@ for ext in [".fasta", ".gff", ".bed"]:
 #             sreads=settings["samples"][sample]["single"]
 #         )
 
-# Filter the alignments
+# Filter the alignments and perform sex prediction (also extract more stats)
 for sample in list(settings["samples"].keys()):
     # print(tnow() + " INFO: Filtering the alignments of " + settings["samples"][sample]["alias"], file=sys.stdout)
     # if settings["samples"][sample]["layout"] == "paired":
@@ -88,3 +88,9 @@ for sample in list(settings["samples"].keys()):
     #         layout="single"
     #     )
 
+    print(tnow() + " INFO: Extracting alignment statistics of " + sample)
+    extract_stats(
+        alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+        features=os.path.join(tmp_dir, settings["alias"] + ".bed"),
+        threads=settings["numb_threads"]
+    )

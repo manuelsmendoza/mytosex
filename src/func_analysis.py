@@ -159,7 +159,7 @@ def filter_alignment(alignment, threads, layout, require=None, exclude=None):
     os.remove(alignment)
 
 
-def extract_stats(alignment, features, outdir, threads):
+def extract_stats(alignment, features, threads):
     """ Extract alignment statistics
 
     Parameters
@@ -168,8 +168,6 @@ def extract_stats(alignment, features, outdir, threads):
         Path to the reads alignment after filtering
     features : str
         Path to genome features coordinates (bed file)
-    outdir : str
-        Directory to write the output
     threads: int
         Number of threads to use
     """

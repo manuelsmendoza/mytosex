@@ -117,11 +117,10 @@ for sample in list(settings["samples"].keys()):
         ind_sex = "Female"
     else:
         ind_sex = None
-    results_list.append(pd.DataFrame.from_dict({
-        "sample": settings["samples"][sample]["alias"],
-        "sex": ind_sex,
-        "pval": pval
-    }))
+
+    sex_result = {"sample": [settings["samples"][sample]["alias"]], "sex": [ind_sex], "pval": [pval]}
+    sex_result = pd.DataFrame.from_dict(sex_result)
+    results_list.append(sex_result)
 
 print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
 pd.concat(metrics_list).to_csv(

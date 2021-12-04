@@ -95,7 +95,7 @@ for sample in list(settings["samples"].keys()):
     #     threads=settings["numb_threads"]
     # )
 
-    metrics_list = list()
+    metrics_list = []
     metrics_list.append(
         alignment_stats(
             coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),
@@ -105,10 +105,12 @@ for sample in list(settings["samples"].keys()):
             ralias=settings["reference"]["alias"]
         )
     )
-    metrics_data = pd.concat(metrics_list)
-    metrics_data.to_csv(
-        os.path.join(data_dir, "align_stats.tsv"),
-        sep="\t",
-        index=False
-    )
+
+print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
+metrics_data = pd.concat(metrics_list)
+metrics_data.to_csv(
+    os.path.join(data_dir, "align_stats.tsv"),
+    sep="\t",
+    index=False
+)
 

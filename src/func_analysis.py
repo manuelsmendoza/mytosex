@@ -177,9 +177,8 @@ def extract_stats(alignment, features, threads):
            + "-@ " + str(threads) + " " \
            + alignment
     cov = "samtools coverage " \
-          + "--min-MQ 30 " \
-          + "--depth 0 " \
-          + "--output " + prefix + ".cov.tsv" + " " \
+          + "-q 30 " \
+          + "-o " + prefix + ".cov.tsv" + " " \
           + alignment
     bcov = "samtools bedcov " \
            + "-Q 30 " \

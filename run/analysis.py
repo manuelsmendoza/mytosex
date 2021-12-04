@@ -88,9 +88,13 @@ for sample in list(settings["samples"].keys()):
     #         layout="single"
     #     )
 
-    print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"])
+    print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
     extract_stats(
         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
         features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
         threads=settings["numb_threads"]
     )
+    # alignment_stats(
+    #     coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "")
+    # )
+    #alignment_stats(coverage, feat_coverage, depth, salias, ralias)

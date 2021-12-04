@@ -73,6 +73,7 @@ for ext in [".fasta", ".gff", ".bed"]:
 #         )
 
 # Filter the alignments and perform sex prediction (also extract more stats)
+metrics_list = []
 for sample in list(settings["samples"].keys()):
     # print(tnow() + " INFO: Filtering the alignments of " + settings["samples"][sample]["alias"], file=sys.stdout)
     # if settings["samples"][sample]["layout"] == "paired":
@@ -95,7 +96,6 @@ for sample in list(settings["samples"].keys()):
     #     threads=settings["numb_threads"]
     # )
 
-    metrics_list = []
     metrics_list.append(
         alignment_stats(
             coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),

@@ -1,3 +1,5 @@
+""" Analysis
+"""
 import os
 import sys
 from src.func_analysis import *
@@ -75,7 +77,6 @@ for ext in [".fasta", ".gff", ".bed"]:
 # Filter the alignments and perform sex prediction (also extract more stats)
 metrics_list = []
 results_list = []
-ref_features = calc_features(os.path.join(tmp_dir, settings["reference"]["alias"] + ".gff"))
 for sample in list(settings["samples"].keys()):
     # print(tnow() + " INFO: Filtering the alignments of " + settings["samples"][sample]["alias"], file=sys.stdout)
     # if settings["samples"][sample]["layout"] == "paired":
@@ -107,32 +108,9 @@ for sample in list(settings["samples"].keys()):
         )
     metrics_list.append(sample_stats)
 
-    print(tnow() + " INFO: Inferring the sex of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    pval = sex_test(
-        rnfeat=ref_features,
-        snfeat=sample_stats
-    )
-    if pval >= 0.75:
-        ind_sex = "Male"
-    elif pval <= 0.25:
-        ind_sex = "Female"
-    else:
-        ind_sex = None
-
-    sex_result = {"sample": [settings["samples"][sample]["alias"]], "sex": [ind_sex], "pval": [pval]}
-    sex_result = pd.DataFrame.from_dict(sex_result)
-    results_list.append(sex_result)
-
 print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
 pd.concat(metrics_list).to_csv(
     os.path.join(data_dir, "align_stats.tsv"),
-    sep="\t",
-    index=False
-)
-
-print(tnow() + " INFO: Exporting sex predictions results")
-pd.concat(results_list).to_csv(
-    os.path.join(settings["output_dir"], "results.tsv"),
     sep="\t",
     index=False
 )

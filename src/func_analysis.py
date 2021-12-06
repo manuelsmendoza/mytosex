@@ -2,8 +2,6 @@ import numpy as np
 import os
 import pandas as pd
 import subprocess as sp
-import sys
-from scipy import stats
 
 
 def build_index(sequence, index, threads):
@@ -198,33 +196,6 @@ def extract_stats(alignment, features, threads):
         )
 
 
-def calc_features(annotation):
-    """ Extract the number of features of interest from the annotation
-
-    Parameters
-    ----------
-    annotation : str
-        Path to the annotation file (gff file)
-    """
-    col_names = ["seqname", "source", "feature", "start", "end", "score", "strand", "frame", "attribute"]
-    ann = pd.read_csv(annotation, sep="\t", names=col_names)
-
-    features = {"genome": [], "npcod": [], "ntrna": [], "nrrna": [], "ncyt": [], "ncox": [], "nnd": [], "natp": []}
-    for seqname in list(set(ann.loc[:, "seqname"])):
-        features["genome"].append(seqname)
-        sub = ann.loc[ann["seqname"] == seqname]
-        features["npcod"].append(sub.loc[sub["feature"] == "CDS"].shape[0])
-        features["ntrna"].append(sub.loc[sub["feature"] == "tRNA"].shape[0])
-        features["nrrna"].append(sub.loc[sub["feature"] == "rRNA"].shape[0])
-        features["ncyt"].append(sub.loc[sub["attribute"].str.contains("CYT")].shape[0])
-        features["ncox"].append(sub.loc[sub["attribute"].str.contains("COX")].shape[0])
-        features["nnd"].append(sub.loc[sub["attribute"].str.contains("ND")].shape[0])
-        features["natp"].append(sub.loc[sub["attribute"].str.contains("ATP")].shape[0])
-    features = pd.DataFrame.from_dict(features)
-
-    return features
-
-
 def gini_index(variable):
     """ Calculate the Gini's index
 
@@ -275,13 +246,6 @@ def alignment_stats(coverage, feat_coverage, depth, salias, ralias):
     fetcov = pd.read_csv(feat_coverage, sep="\t", names=col_names)
     fetcov["depth"] = 100 * fetcov.loc[:, "counts"] / fetcov.loc[:, "length"]
     alldep = pd.read_csv(depth, sep="\t", names=["seqname", "position", "depth"])
-    cov_filt = fetcov.loc[:, "counts"] > 0
-    cyt_filt = fetcov.loc[:, "name"].str.contains("CYT")
-    cox_filt = fetcov.loc[:, "name"].str.contains("COX")
-    atp_filt = fetcov.loc[:, "name"].str.contains("ATP")
-    nd_filt = fetcov.loc[:, "name"].str.contains("ND")
-    rrna_filt = fetcov.loc[:, "name"].str.contains("rRNA")
-    trna_filt = fetcov.loc[:, "name"].str.contains("tRNA")
     align_stats = {
         "sample": [salias],
         "mtfcov": [list(allcov.loc[allcov["#rname"] == ralias + "_mtf", "coverage"])[0]],
@@ -290,71 +254,7 @@ def alignment_stats(coverage, feat_coverage, depth, salias, ralias):
         "mtmmd": [list(allcov.loc[allcov["#rname"] == ralias + "_mtm", "meandepth"])[0]],
         "mtfgi": [gini_index(np.array(list(alldep.loc[alldep["seqname"] == ralias + "_mtf", "depth"])))],
         "mtmgi": [gini_index(np.array(list(alldep.loc[alldep["seqname"] == ralias + "_mtm", "depth"])))],
-        "mtfncyt": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & cyt_filt & cov_filt, :].shape[0]],
-        "mtmncyt": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & cyt_filt & cov_filt, :].shape[0]],
-        "mtfncox": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & cox_filt & cov_filt, :].shape[0]],
-        "mtmncox": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & cox_filt & cov_filt, :].shape[0]],
-        "mtfnatp": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & atp_filt & cov_filt, :].shape[0]],
-        "mtmnatp": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & atp_filt & cov_filt, :].shape[0]],
-        "mtfnnd": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & nd_filt & cov_filt, :].shape[0]],
-        "mtmnnd": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & nd_filt & cov_filt, :].shape[0]],
-        "mtfntrna": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & trna_filt & cov_filt, :].shape[0]],
-        "mtmntrna": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & trna_filt & cov_filt, :].shape[0]],
-        "mtfnrrna": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtf") & rrna_filt & cov_filt, :].shape[0]],
-        "mtmnrrna": [fetcov.loc[(fetcov["seqname"] == ralias + "_mtm") & trna_filt & cov_filt, :].shape[0]]
     }
-    mtfncod = align_stats["mtfncyt"][0] \
-              + align_stats["mtfncox"][0] \
-              + align_stats["mtfnatp"][0] \
-              + align_stats["mtfnnd"][0]
-    mtmncod = align_stats["mtmncyt"][0] \
-              + align_stats["mtmncox"][0] \
-              + align_stats["mtmnatp"][0] \
-              + align_stats["mtmnnd"][0]
     align_stats = pd.DataFrame.from_dict(align_stats)
-    align_stats["mtfncod"] = mtfncod
-    align_stats["mtmncod"] = mtmncod
 
     return align_stats
-
-
-def sex_test(rnfeat, snfeat):
-    """ Test to determine if the sex of the sample
-
-    Parameters
-    ----------
-    rnfeat :
-        Reference genomic features summarised by type
-    snfeat :
-        Sample genomic features summarised by type
-
-    Returns
-    -------
-    sex : str {male, female}
-        The sampel sex (predicted)
-    pvalue : float
-        P-value associated to the prediction
-    """
-    exp_ref = [
-            np.array(list(rnfeat.loc[:, "natp"])).sum(),
-            np.array(list(rnfeat.loc[:, "ncox"])).sum(),
-            np.array(list(rnfeat.loc[:, "ncyt"])).sum(),
-            np.array(list(rnfeat.loc[:, "nnd"])).sum()
-        ]
-
-    obs_spl = [
-            np.array(snfeat.loc[:, ["mtfnatp", "mtmnatp"]]).sum(),
-            np.array(snfeat.loc[:, ["mtfncox", "mtmncox"]]).sum(),
-            np.array(snfeat.loc[:, ["mtfncyt", "mtmncyt"]]).sum(),
-            np.array(snfeat.loc[:, ["mtfnnd", "mtmnnd"]]).sum()
-        ]
-    value = []
-    for i in range(len(obs_spl)):
-        if exp_ref[i] < 5:
-            value.append((abs(obs_spl[i] - exp_ref[i]) - 0.5) ** 2 / exp_ref[i])
-        else:
-            value.append((obs_spl[i] - exp_ref[i]) ** 2 / exp_ref[i])
-    value = np.array(value).sum()
-    df = len(obs_spl) - 1
-
-    return stats.distributions.chi2.sf(value, df)

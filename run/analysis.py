@@ -118,7 +118,7 @@ align_metrics.to_csv(
 )
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-model = keras.models.load_model("model/med")
+model = keras.models.load_model("model/med_model")
 sex_prediction = model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]])
 sex_prediction = np.array([x[0] for x in np.array(sex_prediction).round()], dtype="int")
 

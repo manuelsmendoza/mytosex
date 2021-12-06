@@ -106,7 +106,8 @@ for sample in list(settings["samples"].keys()):
             ralias=settings["reference"]["alias"]
         )
     metrics_list.append(sample_stats)
-    
+
+    print(tnow() + " INFO: Inferring the sex of " + settings["samples"][sample]["alias"], file=sys.stdout)
     pval = sex_test(
         rnfeat=ref_features,
         snfeat=sample_stats

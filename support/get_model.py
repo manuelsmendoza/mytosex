@@ -15,9 +15,8 @@ sex = np.ravel(sex)
 
 val_train, val_test, sex_train, sex_test = train_test_split(val, sex, test_size=1, random_state=40)
 
-scaler = StandardScaler().fit(val_train)
-val_train = scaler.transform(val_train)
-val_test = scaler.transform(val_test)
+scaler = StandardScaler().fit(val)
+val_train = scaler.transform(val)
 
 model = Sequential()
 model.add(Dense(9, activation='relu', input_dim=6))

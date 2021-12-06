@@ -5,6 +5,7 @@ import sys
 from src.func_analysis import *
 from src.func_setup import load_settings
 from src.func_util import tnow, pass_file
+from tensorflow import keras
 
 # Load settings
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
@@ -98,7 +99,7 @@ for sample in list(settings["samples"].keys()):
         features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
         threads=settings["numb_threads"]
     )
-    
+
     sample_stats = alignment_stats(
             coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),
             feat_coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".bedcov.tsv"),
@@ -109,8 +110,23 @@ for sample in list(settings["samples"].keys()):
     metrics_list.append(sample_stats)
 
 print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
-pd.concat(metrics_list).to_csv(
-    os.path.join(data_dir, "align_stats.tsv"),
-    sep="\t",
-    index=False
+align_metrics = pd.concat(metrics_list)
+align_metrics.to_csv(
+     os.path.join(data_dir, "align_stats.tsv"),
+     sep="\t",
+     index=False
 )
+
+print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
+model = keras.models.load_model("model/med.h5")
+sex_prediction = np.array(model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]))
+sex_prediction = sex_prediction.round()
+
+sex_result = pd.DataFrame.from_dict(
+    {
+        "sample": np.array(align_metrics.loc[:, "sample"], dtype="str"),
+        "sex": sex_prediction
+    }
+)
+
+print(sex_result)

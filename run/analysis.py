@@ -130,6 +130,8 @@ data_reference = pd.read_csv(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
     sep="\t"
 )
+data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
+print(data_reference)
 
 model = Sequential()
 model.add(Dense(6, activation='relu', input_dim=6))
@@ -141,6 +143,5 @@ metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "m
 samples_sex = data_reference.loc[:, "sex"]
 model.fit(metrics_values, samples_sex, epochs=250, batch_size=10)
 
-print(data_reference)
 #print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 

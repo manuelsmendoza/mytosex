@@ -119,6 +119,7 @@ for ext in [".fasta", ".gff", ".bed"]:
 # )
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 model_name = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "med_model")
 model = tf.keras.models.load_model(model_name)
 sex_prediction = model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]])

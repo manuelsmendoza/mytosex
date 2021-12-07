@@ -149,7 +149,7 @@ model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 print("01")
-samples_name = align_metrics.loc[:, "sample"]
+samples_name = list(align_metrics.loc[:, "sample"])
 print(samples_name)
 samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 print("02")
@@ -157,7 +157,6 @@ print(samples_info)
 print("03")
 sex_prediction = model.predict(samples_info)
 print("04")
-sex_prediction = [round(x) for x in sex_prediction]
 print(sex_prediction)
 results = {"sample": samples_name, "sex": sex_prediction}
 print("05")

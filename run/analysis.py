@@ -85,7 +85,8 @@ for ext in [".fasta", ".gff", ".bed"]:
 #             sreads=settings["samples"][sample]["single"]
 #         )
 
-Filter the alignments and perform sex prediction (also extract more stats)
+
+# Filter the alignments and perform sex prediction (also extract more stats)
 metrics_list = []
 results_list = []
 for sample in list(settings["samples"].keys()):

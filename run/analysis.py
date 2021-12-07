@@ -157,6 +157,7 @@ print(samples_info)
 print("03")
 sex_prediction = model.predict(samples_info)
 print("04")
+sex_prediction = [x for x in sex_prediction]
 print(sex_prediction)
 results = {"sample": samples_name, "sex": sex_prediction}
 print("05")

@@ -157,12 +157,13 @@ print(samples_info)
 print("03")
 sex_prediction = model.predict(samples_info)
 print("04")
-sex_prediction = [x for x in sex_prediction]
+sex_prediction = [int(x.round()) for x in sex_prediction]
 print(sex_prediction)
 results = {"sample": samples_name, "sex": sex_prediction}
 print("05")
 results = pd.DataFrame.from_dict(results)
 results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
+print(results)
 results.to_csv(
     os.path.join(settings["output_dir"], "results.tsv"),
     sep="\t",

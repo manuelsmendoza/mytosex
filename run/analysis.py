@@ -148,8 +148,8 @@ model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
 model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-samples_name = align_metrics["sample"]
-samples_info = align_metrics[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
+samples_name = align_metrics.loc[:, "sample"]
+samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 
 sex_prediction = np.array(model.predict(samples_info)).round()
 results = {"sample": samples_name, "sex": sex_prediction}

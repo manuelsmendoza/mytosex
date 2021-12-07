@@ -134,7 +134,6 @@ data_reference = pd.read_csv(
     sep="\t"
 )
 data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
-print(data_reference)
 
 model = Sequential()
 model.add(Dense(6, activation='relu', input_dim=6))
@@ -145,6 +144,18 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 samples_sex = data_reference.loc[:, "sex"]
 model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
+model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
 
-#print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
+print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
+samples_name = align_metrics["sample"]
+samples_info = align_metrics[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 
+sex_prediction = np.array(model.predict(samples_info)).round()
+results = {"sample": samples_name, "sex": sex_prediction}
+results = pd.DataFrame.from_dict(results)
+results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
+results.to_csv(
+    os.path.join(settings["output_dir"], "results.tsv"),
+    sep="\t",
+    index=False
+)

@@ -117,6 +117,8 @@ for sample in list(settings["samples"].keys()):
 #      sep="\t",
 #      index=False
 # )
+
+
 print(os.path.abspath(__file__))
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 model = tf.keras.models.load_model("model/med")

@@ -14,6 +14,9 @@ from keras.layers import Dense
 from tensorflow import keras
 
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+
 # Load settings
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
 tmp_dir = os.path.join(settings["output_dir"], "tmp")

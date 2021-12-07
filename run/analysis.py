@@ -2,6 +2,7 @@
 """
 import os
 import sys
+import tensorflow as tf
 from src.func_analysis import *
 from src.func_setup import load_settings
 from src.func_util import tnow, pass_file
@@ -93,32 +94,32 @@ for sample in list(settings["samples"].keys()):
     #         layout="single"
     #     )
 
-    print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    extract_stats(
-        alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
-        features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
-        threads=settings["numb_threads"]
-    )
-
-    sample_stats = alignment_stats(
-            coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),
-            feat_coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".bedcov.tsv"),
-            depth=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".depth.tsv"),
-            salias=settings["samples"][sample]["alias"],
-            ralias=settings["reference"]["alias"]
-        )
-    metrics_list.append(sample_stats)
-
-print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
-align_metrics = pd.concat(metrics_list)
-align_metrics.to_csv(
-     os.path.join(data_dir, "align_stats.tsv"),
-     sep="\t",
-     index=False
-)
-
+#     print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
+#     extract_stats(
+#         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+#         features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
+#         threads=settings["numb_threads"]
+#     )
+# 
+#     sample_stats = alignment_stats(
+#             coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),
+#             feat_coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".bedcov.tsv"),
+#             depth=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".depth.tsv"),
+#             salias=settings["samples"][sample]["alias"],
+#             ralias=settings["reference"]["alias"]
+#         )
+#     metrics_list.append(sample_stats)
+# 
+# print(tnow() + " INFO: Exporting alignment statistics", file=sys.stdout)
+# align_metrics = pd.concat(metrics_list)
+# align_metrics.to_csv(
+#      os.path.join(data_dir, "align_stats.tsv"),
+#      sep="\t",
+#      index=False
+# )
+print(os.path.abspath(__file__))
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-model = keras.models.load_model("model/med")
+model = tf.keras.models.load_model("model/med")
 sex_prediction = model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]])
 sex_prediction = np.array([x[0] for x in np.array(sex_prediction).round()], dtype="int")
 

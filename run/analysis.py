@@ -144,7 +144,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 samples_sex = data_reference.loc[:, "sex"]
-model.fit(metrics_values, samples_sex, epochs=250, batch_size=10)
+model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
 
 #print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 

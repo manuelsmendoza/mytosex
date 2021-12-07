@@ -40,50 +40,50 @@ for ext in [".fasta", ".gff", ".bed"]:
             )
 
 # Build the sequence index
-# print(tnow() + " INFO: Building the reference index", file=sys.stdout)
-# build_index(
-#     os.path.join(tmp_dir, settings["reference"]["alias"] + ".fasta"),
-#     os.path.join(tmp_dir, settings["reference"]["alias"]),
-#     settings["numb_threads"]
-# )
+print(tnow() + " INFO: Building the reference index", file=sys.stdout)
+build_index(
+    os.path.join(tmp_dir, settings["reference"]["alias"] + ".fasta"),
+    os.path.join(tmp_dir, settings["reference"]["alias"]),
+    settings["numb_threads"]
+)
 
 # Align the samples
-# for sample in list(settings["samples"].keys()):
-#     print(tnow() + " INFO: Aligning the reads of " + settings["samples"][sample]["alias"], file=sys.stdout)
-#     if settings["samples"][sample]["layout"] == "paired" and settings["samples"][sample]["ncbi"]:
-#         reads_align(
-#             index=os.path.join(tmp_dir, settings["reference"]["alias"]),
-#             alias=settings["samples"][sample]["alias"],
-#             outdir=tmp_dir,
-#             threads=settings["numb_threads"],
-#             freads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_1.fastq.gz"),
-#             rreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_2.fastq.gz")
-#         )
-#     elif settings["samples"][sample]["layout"] == "paired" and not settings["samples"][sample]["ncbi"]:
-#         reads_align(
-#             index=os.path.join(tmp_dir, settings["reference"]["alias"]),
-#             alias=settings["samples"][sample]["alias"],
-#             outdir=tmp_dir,
-#             threads=settings["numb_threads"],
-#             freads=settings["samples"][sample]["forward"],
-#             rreads=settings["samples"][sample]["reverse"]
-#         )
-#     elif settings["samples"][sample]["layout"] == "single" and settings["samples"][sample]["ncbi"]:
-#         reads_align(
-#             index=os.path.join(tmp_dir, settings["reference"]["alias"]),
-#             alias=settings["samples"][sample]["alias"],
-#             outdir=tmp_dir,
-#             threads=settings["numb_threads"],
-#             sreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fastq.gz")
-#         )
-#     elif settings["samples"][sample]["layout"] == "single" and not settings["samples"][sample]["ncbi"]:
-#         reads_align(
-#             index=os.path.join(tmp_dir, settings["reference"]["alias"]),
-#             alias=settings["samples"][sample]["alias"],
-#             outdir=tmp_dir,
-#             threads=settings["numb_threads"],
-#             sreads=settings["samples"][sample]["single"]
-#         )
+for sample in list(settings["samples"].keys()):
+    print(tnow() + " INFO: Aligning the reads of " + settings["samples"][sample]["alias"], file=sys.stdout)
+    if settings["samples"][sample]["layout"] == "paired" and settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            freads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_1.fastq.gz"),
+            rreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_2.fastq.gz")
+        )
+    elif settings["samples"][sample]["layout"] == "paired" and not settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            freads=settings["samples"][sample]["forward"],
+            rreads=settings["samples"][sample]["reverse"]
+        )
+    elif settings["samples"][sample]["layout"] == "single" and settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            sreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fastq.gz")
+        )
+    elif settings["samples"][sample]["layout"] == "single" and not settings["samples"][sample]["ncbi"]:
+        reads_align(
+            index=os.path.join(tmp_dir, settings["reference"]["alias"]),
+            alias=settings["samples"][sample]["alias"],
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            sreads=settings["samples"][sample]["single"]
+        )
 
 
 # Filter the alignments and perform sex prediction (also extract more stats)
@@ -91,18 +91,18 @@ metrics_list = []
 results_list = []
 for sample in list(settings["samples"].keys()):
     print(tnow() + " INFO: Filtering the alignments of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    # if settings["samples"][sample]["layout"] == "paired":
-    #     filter_alignment(
-    #         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
-    #         threads=settings["numb_threads"],
-    #         layout="paired"
-    #     )
-    # elif settings["samples"][sample]["layout"] == "single":
-    #     filter_alignment(
-    #         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
-    #         threads=settings["numb_threads"],
-    #         layout="single"
-    #     )
+    if settings["samples"][sample]["layout"] == "paired":
+        filter_alignment(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
+            threads=settings["numb_threads"],
+            layout="paired"
+        )
+    elif settings["samples"][sample]["layout"] == "single":
+        filter_alignment(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".sam"),
+            threads=settings["numb_threads"],
+            layout="single"
+        )
 
     print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
     extract_stats(
@@ -148,24 +148,18 @@ model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
 model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-print("01")
 samples_name = list(align_metrics.loc[:, "sample"])
-print(samples_name)
 samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
-print("02")
-print(samples_info)
-print("03")
 sex_prediction = model.predict(samples_info)
-print("04")
 sex_prediction = [int(x.round()) for x in sex_prediction]
-print(sex_prediction)
+
 results = {"sample": samples_name, "sex": sex_prediction}
-print("05")
 results = pd.DataFrame.from_dict(results)
 results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
-print(results)
 results.to_csv(
     os.path.join(settings["output_dir"], "results.tsv"),
     sep="\t",
     index=False
 )
+
+open(os.path.join(settings["output_dir"], ".analysis.ok"), "w").close()

@@ -1,12 +1,18 @@
 """ Analysis
 """
+import numpy as np
 import os
+import pandas as pd
 import sys
 import tensorflow as tf
 from src.func_analysis import *
 from src.func_setup import load_settings
 from src.func_util import tnow, pass_file
+from sklearn.preprocessing import StandardScaler
+from keras.models import Sequential, save_model
+from keras.layers import Dense
 from tensorflow import keras
+
 
 # Load settings
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
@@ -118,24 +124,12 @@ for ext in [".fasta", ".gff", ".bed"]:
 #      index=False
 # )
 
-print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
-model_name = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "med_model")
-model = tf.keras.models.load_model(model_name)
-sex_prediction = model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]])
-sex_prediction = np.array([x[0] for x in np.array(sex_prediction).round()], dtype="int")
 
-sex_result = pd.DataFrame.from_dict(
-    {
-        "sample": np.array(align_metrics.loc[:, "sample"], dtype="str"),
-        "sex": sex_prediction
-    }
+print(tnow() + " INFO: Building the neural network", file=sys.stdout)
+data_reference = pd.read_csv(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
+    sep="\t"
 )
-sex_result["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
-sex_result.to_csv(
-    os.path.join(settings["output_dir"], "sex_prediction.tsv"),
-    sep="\t",
-    index=False
-)
+print(data_reference)
+#print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 
-print(sex_result)

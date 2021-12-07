@@ -1,8 +1,11 @@
 """ Analysis
 """
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import numpy as np
 import os
 import pandas as pd
+import seaborn as sns
 import sys
 import tensorflow as tf
 from src.func_analysis import *
@@ -161,5 +164,30 @@ results.to_csv(
     sep="\t",
     index=False
 )
+
+plot_data = {
+    "x_value": np.array(samples_info.loc[:, "mtmcov"] / samples_info.loc[:, "mtfcov"]),
+    "y_value": np.array((samples_info.loc[:, "mtmgi"] * samples_info.loc[:, "mtmmd"]) /
+                        (samples_info.loc[:, "mtfgi"] * samples_info.loc[:, "mtfmd"])),
+    "sexpred": sex_prediction
+}
+plot_data = pd.DataFrame.from_dict(plot_data)
+plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
+
+male_res = samples_info[samples_info["sex"] == "Male"]
+male_x = np.array(male_res.loc[:, "mtmcov"] / male_res.loc[:, "mtfcov"])
+male_y = np.array((male_res.loc[:, "mtmgi"] * male_res.loc[:, "mtmmd"]) /
+                  (male_res.loc[:, "mtfgi"] * male_res.loc[: , "mtfmd"]))
+male_c = np.repeat(1, male_res.shape[0])
+female_res = samples_info[samples_info["sex"] == "Female"]
+
+fig, ax = plt.subplots()
+ax.scatter(plot_data.loc[:, "x_value"], plot_data.loc[:, "y_value"], c=plot_data.loc[:, "sexpred"])
+yellow_patch = mpatches.Patch(color="yellow", label="Male")
+purple_patch = mpatches.Patch(color="Purple", label="Female")
+ax.legend(handles=[yellow_patch, purple_patch])
+plt.xlabel("Coverage")
+plt.ylabel("Sequencing depth")
+plt.savefig("/Users/manuelmendoza/Desktop/test_plot.svg")
 
 open(os.path.join(settings["output_dir"], ".analysis.ok"), "w").close()

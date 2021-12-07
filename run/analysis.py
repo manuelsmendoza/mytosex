@@ -118,9 +118,8 @@ for ext in [".fasta", ".gff", ".bed"]:
 #      index=False
 # )
 
-print(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "med"))
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-model_name = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "med")
+model_name = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "med_model")
 model = tf.keras.models.load_model(model_name)
 sex_prediction = model.predict(align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]])
 sex_prediction = np.array([x[0] for x in np.array(sex_prediction).round()], dtype="int")

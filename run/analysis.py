@@ -130,6 +130,17 @@ data_reference = pd.read_csv(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
     sep="\t"
 )
+
+model = Sequential()
+model.add(Dense(6, activation='relu', input_dim=6))
+model.add(Dense(3, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
+samples_sex = data_reference.loc[:, "sex"]
+model.fit(metrics_values, samples_sex, epochs=250, batch_size=10)
+
 print(data_reference)
 #print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
 

@@ -57,9 +57,6 @@ def main():
         print(tnow() + " WARN: Sex inference done", file=sys.stdout)
 
     # Run the phylogenetic analysis
-    print(settings)
-    print(list(settings.keys()))
-    print(check_file(os.path.join(output_dir, ".phylo.ok")))
     if "other_spp" in list(settings.keys()) and not check_file(os.path.join(output_dir, ".phylo.ok")):
         import run.phylo
     else:

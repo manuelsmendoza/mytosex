@@ -68,7 +68,7 @@ def extract_reads(alignment, output_dir, layout, alias, threads=1):
         compress_file(reads_file, threads=threads)
 
 
-def transcripts_assembly(freads, rreads, sreads, alignment, outdir, threads, maxmem, layout, alias):
+def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, freads=None, rreads=None, sreads=None):
     """ Assembly and identify the mitogenes sequences
 
     Parameters

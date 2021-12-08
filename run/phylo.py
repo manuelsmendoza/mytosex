@@ -10,7 +10,8 @@ tmp_dir = os.path.join(settings["output_dir"], "tmp")
 
 # Assemble the transcriptomes and extract the CDS
 for sample in list(settings["samples"].keys()):
-    print(tnow() + " INFO: Extracting mitochondrial reads of " + sample, file=sys.stdout)
+    sname = settings["samples"][sample]["alias"]
+    print(tnow() + " INFO: Extracting mitochondrial reads of " + sname, file=sys.stdout)
     extract_reads(
         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fixmate.bam"),
         alias=settings["samples"][sample]["alias"],
@@ -19,7 +20,7 @@ for sample in list(settings["samples"].keys()):
         threads=settings["numb_threads"]
     )
 
-    print(tnow() + " INFO: Assembling the mitogenome of " + sample, file=sys.stdout)
+    print(tnow() + " INFO: Assembling the mitogenome of " + sname, file=sys.stdout)
     if settings["samples"][sample]["layout"] == "single":
         transcripts_assembly(
             layout="single", 

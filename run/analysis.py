@@ -15,8 +15,6 @@ from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential, save_model
 from keras.layers import Dense
 from tensorflow import keras
-
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
@@ -130,64 +128,5 @@ align_metrics.to_csv(
      sep="\t",
      index=False
 )
-
-
-print(tnow() + " INFO: Building the neural network", file=sys.stdout)
-data_reference = pd.read_csv(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
-    sep="\t"
-)
-data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
-
-model = Sequential()
-model.add(Dense(6, activation='relu', input_dim=6))
-model.add(Dense(3, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
-samples_sex = data_reference.loc[:, "sex"]
-model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
-model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
-
-print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-samples_name = list(align_metrics.loc[:, "sample"])
-samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
-sex_prediction = model.predict(samples_info)
-sex_prediction = [int(x.round()) for x in sex_prediction]
-
-results = {"sample": samples_name, "sex": sex_prediction}
-results = pd.DataFrame.from_dict(results)
-results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
-results.to_csv(
-    os.path.join(settings["output_dir"], "results.tsv"),
-    sep="\t",
-    index=False
-)
-
-plot_data = {
-    "x_value": np.array(samples_info.loc[:, "mtmcov"] / samples_info.loc[:, "mtfcov"]),
-    "y_value": np.array((samples_info.loc[:, "mtmgi"] * samples_info.loc[:, "mtmmd"]) /
-                        (samples_info.loc[:, "mtfgi"] * samples_info.loc[:, "mtfmd"])),
-    "sexpred": sex_prediction
-}
-plot_data = pd.DataFrame.from_dict(plot_data)
-plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
-
-male_res = samples_info[samples_info["sex"] == "Male"]
-male_x = np.array(male_res.loc[:, "mtmcov"] / male_res.loc[:, "mtfcov"])
-male_y = np.array((male_res.loc[:, "mtmgi"] * male_res.loc[:, "mtmmd"]) /
-                  (male_res.loc[:, "mtfgi"] * male_res.loc[: , "mtfmd"]))
-male_c = np.repeat(1, male_res.shape[0])
-female_res = samples_info[samples_info["sex"] == "Female"]
-
-fig, ax = plt.subplots()
-ax.scatter(plot_data.loc[:, "x_value"], plot_data.loc[:, "y_value"], c=plot_data.loc[:, "sexpred"])
-yellow_patch = mpatches.Patch(color="yellow", label="Male")
-purple_patch = mpatches.Patch(color="Purple", label="Female")
-ax.legend(handles=[yellow_patch, purple_patch])
-plt.xlabel("Coverage")
-plt.ylabel("Sequencing depth")
-plt.savefig("/Users/manuelmendoza/Desktop/test_plot.svg")
 
 open(os.path.join(settings["output_dir"], ".analysis.ok"), "w").close()

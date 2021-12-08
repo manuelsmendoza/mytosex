@@ -48,8 +48,22 @@ def main():
     if not check_file(os.path.join(output_dir, ".analysis.ok")):
         import run.analysis
     else:
-        print(tnow() + " WARN: Analysis done", file=sys.stdout)
-        sys.exit()
+        print(tnow() + " WARN: Sex determination done", file=sys.stdout)
+
+    # Predict the sex of the samples
+    if not check_file(os.path.join(output_dir, ".prediction.ok")):
+        import run.prediction
+    else:
+        print(tnow() + " WARN: Sex inference done", file=sys.stdout)
+
+    # Run the phylogenetic analysis
+    if "other_spp" in list(settings.keys()) and not check_file(os.path.join(output_dir, ".phylo.ok")):
+        import run.phylo
+    else:
+        print(tnow() + " WARN: Skipping phylogenetic analysis", file=sys.stdout)
+
+    print(tnow() + " INFO: Analysis finished", file=sys.stdout)
+    sys.exit()
 
 
 if __name__ == "__main__":

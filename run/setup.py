@@ -8,7 +8,8 @@ from src.func_util import tnow
 print(tnow() + " INFO: Checking for the dependencies", file=sys.stdout)
 
 module_name = ["yaml", "Bio", "numpy", "pandas", "scipy", "sklearn", "keras", "tensorflow"]
-tool_name = ["fasterq-dump", "pigz", "bowtie2", "bowtie2-build", "samtools"]
+tool_name = ["fasterq-dump", "pigz", "bowtie2", "bowtie2-build", "samtools", "blastn", "makeblastdb", "Trinity", "Lace",
+             "TransDecoder.LongOrfs", "TransDecoder.Predict", "mafft", "modeltest-ng", "raxml-ng"]
 detection = {}
 for dependency in module_name:
     detection.update({dependency: check_dep(dependency, "module")})

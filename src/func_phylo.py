@@ -18,16 +18,14 @@ def extract_cds(sequence, annotation, outdir, alias):
         Human friendly sequence name
     """
     cmd = "gffread " \
-          + "-g " + sequence \
+          + "-g " + sequence + " " \
           + "-x " + os.path.join(outdir, alias + "_cds.fasta") + " " \
           + annotation
-    print(cmd)
     out = sp.run(
         cmd,
         shell=True,
         capture_output=True
     )
-    print(out)
 
 
 def create_db(sequences, outdir):
@@ -46,13 +44,11 @@ def create_db(sequences, outdir):
           + "-dbtype nucl " \
           + "-in " + sequences + " " \
           + "-out " + os.path.join(outdir, os.path.splitext(os.path.basename(sequences))[0])
-    print(cmd)
     out = sp.run(
         cmd,
         shell=True,
         capture_output=True
     )
-    print(out)
 
 
 def extract_reads(alignment, output_dir, layout, alias, threads=1):

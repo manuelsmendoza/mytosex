@@ -161,16 +161,52 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
         assembly_cmd += " --left " + freads + " --right " + rreads
 
     identify_orf_cmd = "TransDecoder.LongOrfs " \
+                       + "-G Mitochondrial-Invertebrates " \
                        + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
                        + "-O " + assembly_dir
     predict_orf_cmd = "TransDecoder.Predict " \
+                      + "-G Mitochondrial-Invertebrates " \
                       + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
                       + "-O " + assembly_dir
 
     for cmd in [assembly_cmd, identify_orf_cmd, predict_orf_cmd]:
+        print(cmd)
         out = sp.run(
             cmd,
             shell=True,
             capture_output=True
         )
+        print(out)
 
+
+def annotate_cds(codseq, database, alias, outdir, threads):
+    """ Identify the gene encoded by a sequence by homology
+
+    Parameters
+    ----------
+    codseq : str
+        Path to the file containing all the protein-coding sequences
+    database : str
+        Nucleotide database to use
+    alias : str
+        Human-friendly name to identify the sample
+    outdir : str
+        Path to the directo to write the output
+    threads : int
+        Number of threads to use
+    """
+    cmd = "blastn " \
+          + "-query " + codseq + " " \
+          + "-db " + database + " " \
+          + "-out " + os.path.join(outdir, alias + ".outfmt6") + " " \
+          + "-evalue 1e-16 " \
+          + "-outfmt 6 " \
+          + "-max_hsps 1 " \
+          + "-max_target_seqs 1 " \
+          + "-num_threads " + str(threads)
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )

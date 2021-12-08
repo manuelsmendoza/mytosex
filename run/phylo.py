@@ -33,25 +33,30 @@ for sample in list(settings["samples"].keys()):
     #     threads=settings["numb_threads"]
     # )
 
-    # print(tnow() + " INFO: Assembling the mitogenome of " + sname, file=sys.stdout)
-    # if settings["samples"][sample]["layout"] == "single":
-    #     transcripts_assembly(
-    #         layout="single",
-    #         sreads=settings["samples"][sample]["single"],
-    #         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
-    #         outdir=tmp_dir,
-    #         threads=settings["numb_threads"],
-    #         maxmem=settings["max_memory"],
-    #         alias=settings["samples"][sample]["alias"]
-    #     )
-    # elif settings["samples"][sample]["layout"] == "paired":
-    #     transcripts_assembly(
-    #         layout="paired",
-    #         freads=settings["samples"][sample]["forward"],
-    #         rreads=settings["samples"][sample]["reverse"],
-    #         alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
-    #         outdir=tmp_dir,
-    #         threads=settings["numb_threads"],
-    #         maxmem=settings["max_memory"],
-    #         alias=settings["samples"][sample]["alias"]
-    #     )
+    print(tnow() + " INFO: Assembling the mitogenome of " + sname, file=sys.stdout)
+    if settings["samples"][sample]["layout"] == "single":
+        transcripts_assembly(
+            layout="single",
+            sreads=settings["samples"][sample]["single"],
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            maxmem=settings["max_memory"],
+            alias=settings["samples"][sample]["alias"]
+        )
+    elif settings["samples"][sample]["layout"] == "paired":
+        transcripts_assembly(
+            layout="paired",
+            freads=settings["samples"][sample]["forward"],
+            rreads=settings["samples"][sample]["reverse"],
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            maxmem=settings["max_memory"],
+            alias=settings["samples"][sample]["alias"]
+        )
+    
+    # print(tnow() + " INFO: Annotating the genes of " + settings["samples"][sample]["alias"])
+    # annotate_cds(
+    #     codseq=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity", )
+    # )

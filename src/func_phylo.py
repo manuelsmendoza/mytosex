@@ -87,6 +87,8 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
         Annotation of the mitogenome of reference
     outdir : str
         Path to the output directory
+    alias : str
+        Human-friendly name to handle the sample
     threads : int
         Number of threads to use
     maxmem : int
@@ -95,6 +97,8 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
         Sequencing layout
     """
     assembly_dir = os.path.join(outdir, alias + "_trinity")
+    os.mkdir(assembly_dir)
+
     assembly_cmd = "Trinity " \
                    + "--bypass_java_version_check " \
                    + "--seqType fa " \

@@ -3,6 +3,56 @@ import subprocess as sp
 from src.func_util import check_file
 
 
+def extract_cds(sequence, annotation, outdir, alias):
+    """ Extract the CDS sequences from a genome and its annotation
+
+    Parameters
+    ----------
+    sequence : str
+        Path to the genome sequences
+    annotation : str
+        Path to the genome annotation
+    outdir : str
+        Path to directory to write the CDS sequences
+    alias : str
+        Human friendly sequence name
+    """
+    cmd = "gffread " \
+          + "-g " + sequence \
+          + "-x " + os.path.join(outdir, alias + "_cds.fasta") + " " \
+          + annotation
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )
+
+
+def create_db(sequences, outdir):
+    """ Create a local BLAST database
+
+    Parameters
+    ----------
+    sequences : str
+        Path to the sequences to build the database
+    outdir : str
+        Path to the directory to wirte te output
+    alias : str
+        Sequences common name
+    """
+    cmd = "makeblastdb " \
+          + "-dbtype nucl " \
+          + "-in " + sequences + " " \
+          + "-out " + os.path.join(outdir, os.path.splitext(os.path.basename(sequences))[0])
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )
+
+
 def extract_reads(alignment, output_dir, layout, alias, threads=1):
     """ Extract the reads mapped propperly to the genome
 

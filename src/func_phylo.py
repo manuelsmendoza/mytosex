@@ -145,7 +145,8 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
         Sequencing layout
     """
     assembly_dir = os.path.join(outdir, alias + "_trinity")
-    os.mkdir(assembly_dir)
+    if not os.path.exists(assembly_dir):
+        os.mkdir(assembly_dir)
 
     assembly_cmd = "Trinity " \
                    + "--bypass_java_version_check " \

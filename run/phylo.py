@@ -1,0 +1,43 @@
+import os
+import sys
+from src.func_phylo import *
+from src.func_setup import load_settings
+from src.func_util import tnow
+
+# Load settings
+settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
+tmp_dir = os.path.join(settings["output_dir"], "tmp")
+
+# Assemble the transcriptomes and extract the CDS
+for sample in list(settings["samples"].keys()):
+    print(tnow() + " INFO: Extracting mitochondrial reads of " + sample, file=sys.stdout)
+    extract_reads(
+        alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fixmate.bam"),
+        alias=settings["samples"][sample]["alias"],
+        output_dir=tmp_dir,
+        layout=settings["samples"][sample]["layout"],
+        threads=settings["numb_threads"]
+    )
+
+    print(tnow() + " INFO: Assembling the mitogenome of " + sample, file=sys.stdout)
+    if settings["samples"][sample]["layout"] == "single":
+        transcripts_assembly(
+            layout="single", 
+            sreads=settings["samples"][sample]["single"], 
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            maxmem=settings["max_memory"],
+            alias=settings["samples"][sample]["alias"]
+        )
+    elif settings["samples"][sample]["layout"] == "paired":
+        transcripts_assembly(
+            layout="paired",
+            freads=settings["samples"][sample]["forward"],
+            rreads=settings["samples"][sample]["reverse"],
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            outdir=tmp_dir,
+            threads=settings["numb_threads"],
+            maxmem=settings["max_memory"],
+            alias=settings["samples"][sample]["alias"]
+        )

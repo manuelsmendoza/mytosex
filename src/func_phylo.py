@@ -105,7 +105,8 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
                    + "--max_memory " + str(maxmem) + "G " \
                    + "--CPU " + str(threads) + " " \
                    + "--genome_guided_bam " + alignment + " " \
-                   + "--genome_guided_max_intron 300" + "--output " + assembly_dir
+                   + "--genome_guided_max_intron 300 " \
+                   + "--output " + assembly_dir
     if layout == "single":
         assembly_cmd += " --single " + sreads
     elif layout == "paired":

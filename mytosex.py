@@ -36,6 +36,7 @@ def main():
     else:
         os.environ["MYTOSEX_SETTINGS"] = settings_checked
         print(tnow() + " WARN: Settings checked previously", file=sys.stdout)
+    settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
 
     # Download the reads and sequences (if needed)
     settings = load_settings(settings_checked)

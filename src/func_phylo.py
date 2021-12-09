@@ -236,8 +236,9 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
     for seq in SeqIO.parse(codseq, "fasta"):
         cds_info = seq.description.split(" ")
         if cds_info[0] in list(all_annotation["qseqid"]):
-            print("OK")
-    #         seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
+            seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
+            print(cds_info)
+            print(seq_att)
     #         seq_annotation.append(
     #             {
     #                 "seqname": [cds_info[-1].split(":")[0]],

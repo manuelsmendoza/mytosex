@@ -72,9 +72,9 @@ for sample in list(settings["samples"].keys()):
         ref_alias=settings["reference"]["alias"],
         sample_alias=settings["samples"][sample]["alias"]
     )
-    ann.to_csv(
-        os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
-        sep="\t",
-        index=False,
-        header=False
-    )
+    # ann.to_csv(
+    #     os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
+    #     sep="\t",
+    #     index=False,
+    #     header=False
+    # )

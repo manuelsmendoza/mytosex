@@ -242,9 +242,9 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
                     "source": "BLAST",
                     "feature": "CDS",
                     "start": cds_info[-1].split(":")[-1].split("-")[0],
-                    "end": cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0],
+                    "end": cds_info[-1].split(":")[-1].split("-")[1].split("(")[0],
                     "score": ".",
-                    "strand": cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", ""),
+                    "strand": cds_info[-1].split(":")[-1].split("-")[1].split("(")[-1].replace(")", ""),
                     "frame": int(0),
                     "attribute": "ID=" + seq_att.replace(ref_alias, sample_alias)
                 }

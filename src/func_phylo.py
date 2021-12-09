@@ -237,19 +237,19 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
         cds_info = seq.description.split(" ")
         if cds_info[0] in list(all_annotation["qseqid"]):
             print("OK")
-            seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
-            seq_annotation.append(
-                {
-                    "seqname": [cds_info[-1].split(":")[0]],
-                    "source": ["BLAST"],
-                    "feature": ["CDS"],
-                    "start": [int(cds_info[-1].split(":")[-1].split("-")[0])],
-                    "end": [int(cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0])],
-                    "score": ["."],
-                    "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
-                    "frame": [int(0)],
-                    "attribute": ["ID=" + seq_att.replace(ref_alias, sample_alias)]
-                }
-            )
-
-    return pd.DataFrame(seq_annotation)
+    #         seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
+    #         seq_annotation.append(
+    #             {
+    #                 "seqname": [cds_info[-1].split(":")[0]],
+    #                 "source": ["BLAST"],
+    #                 "feature": ["CDS"],
+    #                 "start": [int(cds_info[-1].split(":")[-1].split("-")[0])],
+    #                 "end": [int(cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0])],
+    #                 "score": ["."],
+    #                 "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
+    #                 "frame": [int(0)],
+    #                 "attribute": ["ID=" + seq_att.replace(ref_alias, sample_alias)]
+    #             }
+    #         )
+    #
+    # return pd.DataFrame(seq_annotation)

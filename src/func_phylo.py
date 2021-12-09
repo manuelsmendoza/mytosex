@@ -251,3 +251,29 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
             )
 
     return pd.DataFrame(seq_annotation)
+
+
+def multiple_alignment(seq_in, alg_out, threads=1, iterations=1000):
+    """ Align multiple sequences
+
+    Parameters
+    ----------
+    seq_in : str
+        File containing the sequences to align
+    alg_out : str
+        Path to output file with the alignments
+    threads : int
+        Number of threads to use
+    iterations : int
+        Maximum number of iterative refinement
+    """
+    cmd = "mafft-ginsi " \
+          + "--maxiterate " + str(iterations) + " " \
+          + "--thread " + str(threads) + " " \
+          + seq_in + " > " + alg_out
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )

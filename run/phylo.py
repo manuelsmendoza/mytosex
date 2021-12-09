@@ -8,6 +8,10 @@ from src.func_util import tnow
 # Load settings
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
 tmp_dir = os.path.join(settings["output_dir"], "tmp")
+data_dir = os.path.join(settings["output_dir"], "data")
+
+if not os.path.exists(os.path.join(data_dir, "msa")):
+    os.mkdir(os.path.join(data_dir, "msa"))
 
 # Create a local database to annotate the genes
 # print(tnow() + " INFO: Creating a local database to annotate the genes", file=sys.stdout)
@@ -112,14 +116,21 @@ for sample in list(settings["samples"].keys()):
 #     )
 
 # Store each gene into a single file
-print(tnow() + " INFO: Storing together the sequences of each gene", file=sys.stdout)
 cds_files = list(filter(lambda f: "_cds.fasta" in f, os.listdir(tmp_dir)))
 cds_files.remove(settings["reference"]["alias"] + "_cds.fasta")
 cds_files = [os.path.join(tmp_dir, x) for x in cds_files]
 for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND5", "ND6", "ND4L"]:
+    print(tnow() + " INFO: Compiling the sequences all the sequences realated to " + gene, file=sys.stdout)
     with open(os.path.join(tmp_dir, gene + ".fasta"), "w") as gene_file:
         for file in cds_files:
             for rec in SeqIO.parse(file, "fasta"):
                 if rec.id.endswith(gene):
                     SeqIO.write(rec, gene_file, "fasta")
     gene_file.close()
+
+    print(tnow() + " INFO: Aligning the multiple sequences of " + gene, file=sys.stdout)
+    multiple_alignment(
+        seq_in=os.path.join(tmp_dir, gene + ".fasta"),
+        alg_out=os.path.join(data_dir, "msa", gene + ".fasta"),
+        threads=settings["numb_threads"]
+    )

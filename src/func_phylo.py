@@ -232,25 +232,22 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
                 "evalue", "bitscore"]
     all_annotation = pd.read_csv(codann, sep="\t", names=colnames)
     seq_annotation = []
-    print(all_annotation)
     for seq in SeqIO.parse(codseq, "fasta"):
         cds_info = seq.description.split(" ")
         if cds_info[0] in list(all_annotation.loc[:, "qseqid"]):
             seq_att = list(all_annotation.loc[all_annotation["qseqid"] == cds_info[0], "sseqid"])[0]
-            print(cds_info)
-            print(seq_att)
-    #         seq_annotation.append(
-    #             {
-    #                 "seqname": [cds_info[-1].split(":")[0]],
-    #                 "source": ["BLAST"],
-    #                 "feature": ["CDS"],
-    #                 "start": [int(cds_info[-1].split(":")[-1].split("-")[0])],
-    #                 "end": [int(cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0])],
-    #                 "score": ["."],
-    #                 "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
-    #                 "frame": [int(0)],
-    #                 "attribute": ["ID=" + seq_att.replace(ref_alias, sample_alias)]
-    #             }
-    #         )
-    #
-    # return pd.DataFrame(seq_annotation)
+            seq_annotation.append(
+                {
+                    "seqname": [cds_info[-1].split(":")[0]],
+                    "source": ["BLAST"],
+                    "feature": ["CDS"],
+                    "start": [int(cds_info[-1].split(":")[-1].split("-")[0])],
+                    "end": [int(cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0])],
+                    "score": ["."],
+                    "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
+                    "frame": [int(0)],
+                    "attribute": ["ID=" + seq_att.replace(ref_alias, sample_alias)]
+                }
+            )
+
+    return pd.DataFrame(seq_annotation)

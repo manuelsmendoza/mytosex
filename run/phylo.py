@@ -56,25 +56,33 @@ for sample in list(settings["samples"].keys()):
     #         alias=settings["samples"][sample]["alias"]
     #     )
     
-    print(tnow() + " INFO: Annotating the genes of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    wd = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity")
-    annotate_cds(
-        codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
-        database=os.path.join(tmp_dir, settings["reference"]["alias"] + "_cds"),
+    # print(tnow() + " INFO: Annotating the genes of " + settings["samples"][sample]["alias"], file=sys.stdout)
+    # wd = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity")
+    # annotate_cds(
+    #     codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
+    #     database=os.path.join(tmp_dir, settings["reference"]["alias"] + "_cds"),
+    #     outdir=tmp_dir,
+    #     alias=settings["samples"][sample]["alias"],
+    #     threads=settings["numb_threads"]
+    # )
+    # 
+    # ann = build_annotation(
+    #     codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
+    #     codann=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".outfmt6"),
+    #     ref_alias=settings["reference"]["alias"],
+    #     sample_alias=settings["samples"][sample]["alias"]
+    # )
+    # ann.to_csv(
+    #     os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
+    #     sep="\t",
+    #     index=False,
+    #     header=False
+    # )
+    
+    print(tnow() + " INFO: Extracting coding sequences from " + settings["samples"][sample]["alias"], file=sys.stdout)
+    extract_cds(
+        sequence=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity", "Trinity-GG.fasta"),
+        annotation=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
         outdir=tmp_dir,
-        alias=settings["samples"][sample]["alias"],
-        threads=settings["numb_threads"]
-    )
-
-    ann = build_annotation(
-        codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
-        codann=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".outfmt6"),
-        ref_alias=settings["reference"]["alias"],
-        sample_alias=settings["samples"][sample]["alias"]
-    )
-    ann.to_csv(
-        os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
-        sep="\t",
-        index=False,
-        header=False
+        alias=settings["samples"][sample]["alias"]
     )

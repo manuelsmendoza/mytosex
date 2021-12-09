@@ -1,5 +1,6 @@
 import os
 import sys
+from Bio import SeqIO
 from src.func_phylo import *
 from src.func_setup import load_settings
 from src.func_util import tnow
@@ -89,24 +90,34 @@ for sample in list(settings["samples"].keys()):
 
 
 # Merge the mitogenomes of other species in a single file
-print(tnow() + " INFO: Merging the mitogenomes of other species in a single file", file=sys.stdout)
-for specie in list(settings["other_spp"].keys()):
-    for mt in ["mt", "mtf", "mtm"]:
-        if mt in list(settings["other_spp"][specie].keys()):
-            prefix = settings["other_spp"][specie]["alias"] + "_" + mt
-            extract_cds(
-                sequence=os.path.join(tmp_dir, prefix + ".fasta"),
-                annotation=os.path.join(tmp_dir, prefix + ".gff"),
-                outdir=tmp_dir,
-                alias=prefix
-            )
+# print(tnow() + " INFO: Merging the mitogenomes of other species in a single file", file=sys.stdout)
+# for specie in list(settings["other_spp"].keys()):
+#     for mt in ["mt", "mtf", "mtm"]:
+#         if mt in list(settings["other_spp"][specie].keys()):
+#             prefix = settings["other_spp"][specie]["alias"] + "_" + mt
+#             extract_cds(
+#                 sequence=os.path.join(tmp_dir, prefix + ".fasta"),
+#                 annotation=os.path.join(tmp_dir, prefix + ".gff"),
+#                 outdir=tmp_dir,
+#                 alias=prefix
+#             )
+#
+# for mt in ["mtf", "mtm"]:
+#     prefix = settings["reference"]["alias"] + "_" + mt
+#     extract_cds(
+#         sequence=os.path.join(tmp_dir, prefix + ".fasta"),
+#         annotation=os.path.join(tmp_dir, prefix + ".gff"),
+#         outdir=tmp_dir,
+#         alias=prefix
+#     )
 
-for mt in ["mtf", "mtm"]:
-    prefix = settings["reference"]["alias"] + "_" + mt
-    extract_cds(
-        sequence=os.path.join(tmp_dir, prefix + ".fasta"),
-        annotation=os.path.join(tmp_dir, prefix + ".gff"),
-        outdir=tmp_dir,
-        alias=prefix
-    )
-
+# Store each gene into a single file
+print(tnow() + " INFO: Storing together the sequences of each gene", file=sys.stdout)
+cds_files = list(filter(lambda f: "_cds.fasta" in f, os.listdir(tmp_dir)))
+cds_files = [os.path.join(tmp_dir, x) for x in cds_files]
+for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND5", "ND6", "ND4L"]:
+    with open(os.path.join(tmp_dir, gene + ".fasta"), "w") as gene_file:
+        for file in cds_files:
+            for rec in SeqIO.parse(file, "fasta"):
+                if rec.id.endswith(gene):
+                    SeqIO.write(rec, gene_file, "fasta")

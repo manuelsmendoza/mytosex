@@ -205,8 +205,8 @@ def annotate(record, alias):
         inplace=True
     )
     annotation.replace(
-        {"attribute": [r"ID=ATPase"]},
-        {"attribute": [r"ID=ATP"]},
+        {"attribute": [r"ID=ATPase", r"ID=atp"]},
+        {"attribute": [r"ID=ATP", r"ID=ATP"]},
         regex=True,
         inplace=True
     )

@@ -79,10 +79,34 @@ for sample in list(settings["samples"].keys()):
     #     header=False
     # )
     
-    print(tnow() + " INFO: Extracting coding sequences from " + settings["samples"][sample]["alias"], file=sys.stdout)
+    # print(tnow() + " INFO: Extracting coding sequences from " + settings["samples"][sample]["alias"], file=sys.stdout)
+    # extract_cds(
+    #     sequence=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity", "Trinity-GG.fasta"),
+    #     annotation=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
+    #     outdir=tmp_dir,
+    #     alias=settings["samples"][sample]["alias"]
+    # )
+
+
+# Merge the mitogenomes of other species in a single file
+print(tnow() + " INFO: Merging the mitogenomes of other species in a single file", file=sys.stdout)
+for specie in list(settings["other_spp"].keys()):
+    for mt in ["mt", "mtf", "mtm"]:
+        if mt in list(settings["other_spp"][specie].keys()):
+            prefix = settings["other_spp"][specie]["alias"] + "_" + mt
+            extract_cds(
+                sequence=os.path.join(tmp_dir, prefix + ".fasta"),
+                annotation=os.path.join(tmp_dir, prefix + ".gff"),
+                outdir=tmp_dir,
+                alias=prefix
+            )
+
+for mt in ["mtf", "mtm"]:
+    prefix = settings["reference"]["alias"] + "_" + mt
     extract_cds(
-        sequence=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity", "Trinity-GG.fasta"),
-        annotation=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
+        sequence=os.path.join(tmp_dir, prefix + ".fasta"),
+        annotation=os.path.join(tmp_dir, prefix + ".gff"),
         outdir=tmp_dir,
-        alias=settings["samples"][sample]["alias"]
+        alias=prefix
     )
+

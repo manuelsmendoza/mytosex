@@ -121,3 +121,4 @@ for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3"
             for rec in SeqIO.parse(file, "fasta"):
                 if rec.id.endswith(gene):
                     SeqIO.write(rec, gene_file, "fasta")
+    gene_file.close()

@@ -232,10 +232,11 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
                 "evalue", "bitscore"]
     all_annotation = pd.read_csv(codann, sep="\t", names=colnames)
     seq_annotation = []
-    
+    print(all_annotation)
     for seq in SeqIO.parse(codseq, "fasta"):
         cds_info = seq.description.split(" ")
         if cds_info[0] in list(all_annotation["qseqid"]):
+            print("OK")
             seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
             seq_annotation.append(
                 {
@@ -247,7 +248,7 @@ def build_annotation(codseq, codann, ref_alias, sample_alias):
                     "score": ["."],
                     "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
                     "frame": [int(0)],
-                    "attribute": [seq_att.replace(ref_alias, sample_alias)]
+                    "attribute": ["ID=" + seq_att.replace(ref_alias, sample_alias)]
                 }
             )
 

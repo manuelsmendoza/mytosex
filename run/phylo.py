@@ -37,7 +37,7 @@ for sample in list(settings["samples"].keys()):
     if settings["samples"][sample]["layout"] == "single":
         transcripts_assembly(
             layout="single",
-            sreads=settings["samples"][sample]["single"],
+            sreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".fasta.gz"),
             alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
             outdir=tmp_dir,
             threads=settings["numb_threads"],
@@ -47,8 +47,8 @@ for sample in list(settings["samples"].keys()):
     elif settings["samples"][sample]["layout"] == "paired":
         transcripts_assembly(
             layout="paired",
-            freads=settings["samples"][sample]["forward"],
-            rreads=settings["samples"][sample]["reverse"],
+            freads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_1.fasta.gz"),
+            rreads=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_2.fasta.gz"),
             alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
             outdir=tmp_dir,
             threads=settings["numb_threads"],

@@ -1,5 +1,7 @@
 import os
+import pandas as pd
 import subprocess as sp
+from Bio import SeqIO
 from src.func_util import check_file
 
 
@@ -210,3 +212,42 @@ def annotate_cds(codseq, database, alias, outdir, threads):
         shell=True,
         capture_output=True
     )
+
+
+def build_annotation(codseq, codann, ref_alias, sample_alias):
+    """ Rebuild the coding sequences annotation to convert into gff format
+
+    Parameters
+    ----------
+    codseq : str
+        Path to the codging sequences
+    codann : str
+        Path to the annotation results (blastn output)
+    ref_alias : str
+        Human-friendly name to call the reference
+    sample_alias : str
+        Sample human-friendly name
+    """
+    colnames = ["qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send",
+                "evalue", "bitscore"]
+    all_annotation = pd.read_csv(codann, sep="\t", names=colnames)
+    seq_annotation = []
+    
+    for seq in SeqIO.parse(codseq, "fasta"):
+        cds_info = seq.description.split(" ")
+        seq_att = str(all_annotation.loc[all_annotation["qseqid"] == cds_info[0]].sseqid[0])
+        seq_annotation.append(
+            {
+                "seqname": [cds_info[-1].split(":")[0]],
+                "source": ["BLAST"],
+                "feature": ["CDS"],
+                "start": [int(cds_info[-1].split(":")[-1].split("-")[0])],
+                "end": [int(cds_info[-1].split(":")[-1].split("-")[-1].split("(")[0])],
+                "score": ["."],
+                "strand": [cds_info[-1].split(":")[-1].split("-")[-1].split("(")[-1].replace(")", "")],
+                "frame": [int(0)],
+                "attribute": [seq_att.replace(ref_alias, sample_alias)]
+            }
+        )
+
+    return pd.DataFrame(seq_annotation)

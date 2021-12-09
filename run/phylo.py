@@ -56,7 +56,7 @@ for sample in list(settings["samples"].keys()):
     #         alias=settings["samples"][sample]["alias"]
     #     )
     
-    print(tnow() + " INFO: Annotating the genes of " + settings["samples"][sample]["alias"])
+    print(tnow() + " INFO: Annotating the genes of " + settings["samples"][sample]["alias"], file=sys.stdout)
     wd = os.path.join(tmp_dir, settings["samples"][sample]["alias"] + "_trinity")
     annotate_cds(
         codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
@@ -64,4 +64,17 @@ for sample in list(settings["samples"].keys()):
         outdir=tmp_dir,
         alias=settings["samples"][sample]["alias"],
         threads=settings["numb_threads"]
+    )
+
+    ann = build_annotation(
+        codseq=os.path.join(wd, "Trinity-GG.fasta.transdecoder.cds"),
+        codann=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".outfmt6"),
+        ref_alias=settings["reference"]["alias"],
+        sample_alias=settings["samples"][sample]["alias"]
+    )
+    ann.to_csv(
+        os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".gff"),
+        sep="\t",
+        index=False,
+        header=False
     )

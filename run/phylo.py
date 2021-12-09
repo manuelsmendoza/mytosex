@@ -114,6 +114,7 @@ for sample in list(settings["samples"].keys()):
 # Store each gene into a single file
 print(tnow() + " INFO: Storing together the sequences of each gene", file=sys.stdout)
 cds_files = list(filter(lambda f: "_cds.fasta" in f, os.listdir(tmp_dir)))
+cds_files.remove(settings["reference"]["alias"] + "_cds.fasta")
 cds_files = [os.path.join(tmp_dir, x) for x in cds_files]
 for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND5", "ND6", "ND4L"]:
     with open(os.path.join(tmp_dir, gene + ".fasta"), "w") as gene_file:

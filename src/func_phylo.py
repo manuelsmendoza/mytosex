@@ -306,3 +306,38 @@ def rename_dup(sequences):
         seqrec.description = ""
 
     return recs
+
+
+def build_tree(msa_file, out_pref, threads):
+    """
+
+    :param msa_file:
+    :param out_pref:
+    :param threads:
+    :return:
+    """
+    cmd = "modeltest-ng " \
+          + "--force " \
+          + "--datatype nt " \
+          + "--input " + msa_file + " " \
+          + "--output " + out_pref + " " \
+          + "--processes " + str(threads) + " " \
+          + "-t ml"
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )
+
+    raxml_cmd = []
+    with open(out_pref + ".out", "r") as log_file:
+        for line in log_file.readlines():
+            if line.find("raxml-ng") > 0:
+                raxml_cmd.append(line.replace("> ", ""))
+    cmd = raxml_cmd[-1]
+    cmd = cmd.replace("\n", "")
+    cmd = cmd.replace("  ", "")
+    cmd = cmd + " " \
+          + "--all " \
+          + "--threads " + str(threads)

@@ -345,3 +345,9 @@ def build_tree(msa_file, out_pref, threads):
     cmd = cmd + " " \
           + "--all " \
           + "--threads " + str(threads)
+
+    out = sp.run(
+        cmd,
+        shell=True,
+        capture_output=True
+    )

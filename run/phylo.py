@@ -141,6 +141,4 @@ for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3"
         threads=settings["numb_threads"]
     )
 
-
-
-
+    print(tnow() + " INFO: Building the gene tree of " + gene, file=sys.stdout)

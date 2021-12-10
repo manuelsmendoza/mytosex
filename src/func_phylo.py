@@ -309,12 +309,16 @@ def rename_dup(sequences):
 
 
 def build_tree(msa_file, out_pref, threads):
-    """
+    """ Predicts the subtitution model and build the gene tree
 
-    :param msa_file:
-    :param out_pref:
-    :param threads:
-    :return:
+    Parameters
+    ----------
+    msa_file : str
+        Path to multiple sequence alignment
+    out_pref : str
+        Path to write the output
+    threads : int
+        Number of threads to use
     """
     cmd = "modeltest-ng " \
           + "--force " \

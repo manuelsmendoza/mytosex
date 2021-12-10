@@ -288,14 +288,14 @@ def rename_dup(sequences):
         Path to the sequences annotated
     """
     recs = []
-    for r in SeqIO.parse(sequences, "fasta"):
-        recs.append(r)
+    for rec in SeqIO.parse(sequences, "fasta"):
+        recs.append(rec)
 
     for rec_id in list(set([seqrec.id for seqrec in recs])):
         rec_freq = 0
         for seqrec in recs:
             if seqrec.id == rec_id:
-                seqrec.id = seqrec.id + "." + str(rec_freq)
+                seqrec.id = rec_id + "." + str(rec_freq)
                 rec_freq += 1
 
     for seqrec in recs:

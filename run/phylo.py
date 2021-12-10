@@ -13,6 +13,9 @@ data_dir = os.path.join(settings["output_dir"], "data")
 if not os.path.exists(os.path.join(data_dir, "msa")):
     os.mkdir(os.path.join(data_dir, "msa"))
 
+if not os.path.exists(os.path.join(data_dir, "tree")):
+    os.mkdir(os.path.join(data_dir, "tree"))
+
 # Create a local database to annotate the genes
 # print(tnow() + " INFO: Creating a local database to annotate the genes", file=sys.stdout)
 # extract_cds(
@@ -142,3 +145,8 @@ for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3"
     )
 
     print(tnow() + " INFO: Building the gene tree of " + gene, file=sys.stdout)
+    build_tree(
+        msa_file=os.path.join(data_dir, "msa", gene + ".fasta"),
+        out_pref=os.path.join(data_dir, "tree", gene),
+        threads=settings["numb_threads"]
+    )

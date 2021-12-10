@@ -301,5 +301,6 @@ def rename_dup(sequences):
     for seqrec in recs:
         if seqrec.id.endswith(".0"):
             seqrec.id = seqrec.id.replace(".0", "")
+        seqrec.id = seqrec.id.split(" ")[0]
 
     return recs

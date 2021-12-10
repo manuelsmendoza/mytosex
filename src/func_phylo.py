@@ -277,3 +277,29 @@ def multiple_alignment(seq_in, alg_out, threads=1, iterations=1000):
         shell=True,
         capture_output=True
     )
+
+
+def rename_dup(sequences):
+    """ Rename the sequences duplicated
+
+    Parameters
+    ----------
+    sequences : str
+        Path to the sequences annotated
+    """
+    recs = []
+    for r in SeqIO.parse(sequences, "fasta"):
+        recs.append(r)
+
+    for rec_id in list(set([seqrec.id for seqrec in recs])):
+        rec_freq = 0
+        for seqrec in recs:
+            if seqrec.id == rec_id:
+                seqrec.id = seqrec.id + "." + str(rec_freq)
+                rec_freq += 1
+
+    for seqrec in recs:
+        if seqrec.id.endswith(".0"):
+            seqrec.id = seqrec.id.replace(".0", "")
+
+    return recs

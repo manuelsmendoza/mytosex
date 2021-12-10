@@ -128,9 +128,19 @@ for gene in ["ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3"
                     SeqIO.write(rec, gene_file, "fasta")
     gene_file.close()
 
+    renamed_seqs = rename_dup(os.path.join(tmp_dir, gene + ".fasta"))
+    with open(os.path.join(tmp_dir, gene + "_numdup.fasta"), "w") as gene_file:
+        for rec in renamed_seqs:
+            SeqIO.write(rec, gene_file, "fasta")
+    gene_file.close()
+
     print(tnow() + " INFO: Aligning the multiple sequences of " + gene, file=sys.stdout)
     multiple_alignment(
-        seq_in=os.path.join(tmp_dir, gene + ".fasta"),
+        seq_in=os.path.join(tmp_dir, gene + "_numdup.fasta"),
         alg_out=os.path.join(data_dir, "msa", gene + ".fasta"),
         threads=settings["numb_threads"]
     )
+
+
+
+

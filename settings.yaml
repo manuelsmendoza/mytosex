@@ -1,6 +1,6 @@
 numb_threads: 24
 max_memory: 32
-output_dir: '/path/output_directory'
+output_dir: ${CONDA_ENVS_PATH}/mytosex_env
 reference:
   alias: 'med'
   mtf: 'MF407676'

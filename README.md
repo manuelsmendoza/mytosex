@@ -23,14 +23,14 @@ tools works in three acts:
 This tool can be installed as follows.
 
 ```shell
-# Create the conda environment
-conda env create --file environment.yaml
-
 # Clone the repository
 git clone https://github.com/manuelsmendoza/mytosex.git
 
+# Create the conda environment
+cd mytosex && conda env create --file environment.yaml
+
 # Add it to the PATH
-export PATH=$PATH:$(readlink -f mytosex)
+export PATH=$PATH:$PWD
 ```
 
 To use this tools, create a file containing the information required for the analysis and pass it as positional 

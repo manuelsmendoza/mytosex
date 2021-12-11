@@ -18,7 +18,7 @@ tools works in three acts:
    2. We use the reads mapped to the mitogenomes to assemble *de novo* the mitogenes and after annotated them, we 
       performed a phylogenetic analysis building the different gene trees.
 
-# Installation
+# Installation and use
 `MyToSex` is an open-source tools written in [Python3](https://www.python.org) that requires multiple modules.
 This tool can be installed as follows.
 
@@ -31,6 +31,13 @@ git clone https://github.com/manuelsmendoza/mytosex.git
 
 # Add it to the PATH
 export PATH=$PATH:$(readlink -f mytosex)
+```
+
+To use this tools, create a file containing the information required for the analysis and pass it as positional 
+argument as we have specified below. To see more information about the settings file, check it in the 
+[wiki](https://github.com/manuelsmendoza/mytosex/wiki).
+```shell
+python3 mytosex.py settings.yaml
 ```
 
 # Resources

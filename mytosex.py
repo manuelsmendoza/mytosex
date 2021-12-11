@@ -5,6 +5,7 @@ mitochondrial genomes content.
 
 import argparse as arg
 import os
+import shutil as sh
 import sys
 from src.func_setup import *
 from src.func_util import *
@@ -62,6 +63,7 @@ def main():
     else:
         print(tnow() + " WARN: Skipping phylogenetic analysis", file=sys.stdout)
 
+    sh.rmtree(os.path.join(settings["output_dir"], "tmp"))
     print(tnow() + " INFO: Analysis finished", file=sys.stdout)
     sys.exit()
 

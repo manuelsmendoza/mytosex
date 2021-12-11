@@ -22,7 +22,6 @@ tools works in three acts:
 `MyToSex` is an open-source tools written in [Python3](https://www.python.org) that requires multiple modules.
 This tool can be installed as follows.
 
-**Option 1**
 ```shell
 # Create the conda environment
 conda env create --file environment.yaml
@@ -32,11 +31,6 @@ git clone https://github.com/manuelsmendoza/mytosex.git
 
 # Add it to the PATH
 export PATH=$PATH:$(readlink -f mytosex)
-```
-**Option 2**
-```shell
-# Install it using pip
-pip install mytosex==0.1 --user
 ```
 
 # Resources

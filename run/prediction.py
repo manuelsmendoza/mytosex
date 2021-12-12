@@ -31,6 +31,7 @@ data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
 model = Sequential()
 model.add(Dense(6, activation='relu', input_dim=6))
 model.add(Dense(3, activation='relu'))
+model.add(Dense(3, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 

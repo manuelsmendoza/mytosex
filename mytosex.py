@@ -22,6 +22,7 @@ def main():
     parser.add_argument("-v", "--version", action="version", version=__version__, help="show the current version")
     args = parser.parse_args()
     os.environ["MYTOSEX_SETTINGS"] = os.path.abspath(args.settings[0])
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
     # Common values
     output_dir = os.path.join(load_settings(os.path.abspath(args.settings[0]))["output_dir"], "mytosex_result")

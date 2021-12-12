@@ -23,6 +23,7 @@ def main():
     args = parser.parse_args()
     os.environ["MYTOSEX_SETTINGS"] = os.path.abspath(args.settings[0])
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
     # Common values
     output_dir = os.path.join(load_settings(os.path.abspath(args.settings[0]))["output_dir"], "mytosex_result")

@@ -179,6 +179,7 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
             shell=True,
             capture_output=True
         )
+        print(out)
 
 
 def annotate_cds(codseq, database, alias, outdir, threads):

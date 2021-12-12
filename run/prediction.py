@@ -66,9 +66,8 @@ plot_data = {
     "sexpred": sex_prediction
 }
 plot_data = pd.DataFrame.from_dict(plot_data)
-#plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
+plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
 
-print(plot_data)
 sns.scatterplot(
     data=plot_data,
     x="x_value",

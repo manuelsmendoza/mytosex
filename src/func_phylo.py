@@ -180,7 +180,6 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
     #                   + "-O " + assembly_dir
 
     os.chdir(assembly_dir)
-    print(assembly_dir)
     for cmd in [identify_orf_cmd, predict_orf_cmd]:
         print(os.getcwd())
         out = sp.run(
@@ -188,7 +187,6 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
             shell=True,
             capture_output=True
         )
-        print(out)
 
 
 def annotate_cds(codseq, database, alias, outdir, threads):

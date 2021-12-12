@@ -7,7 +7,7 @@ from src.func_util import tnow
 # Checking for the dependencies
 print(tnow() + " INFO: Checking for the dependencies", file=sys.stdout)
 
-module_name = ["yaml", "Bio", "numpy", "pandas", "scipy", "sklearn", "keras", "tensorflow"]
+module_name = ["yaml", "Bio", "numpy", "pandas", "scipy", "sklearn", "keras", "tensorflow", "seaborn"]
 tool_name = ["fasterq-dump", "pigz", "bowtie2", "bowtie2-build", "samtools", "blastn", "makeblastdb", "Trinity", "Lace",
              "TransDecoder.LongOrfs", "TransDecoder.Predict", "mafft", "modeltest-ng", "raxml-ng"]
 detection = {}

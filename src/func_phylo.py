@@ -162,19 +162,27 @@ def transcripts_assembly(alignment, outdir, threads, maxmem, layout, alias, frea
         assembly_cmd += " --single " + sreads
     elif layout == "paired":
         assembly_cmd += " --left " + freads + " --right " + rreads
+    out = sp.run(
+        assembly_cmd,
+        shell=True,
+        capture_output=True
+    )
 
     identify_orf_cmd = "TransDecoder.LongOrfs " \
                        + "-G Mitochondrial-Invertebrates " \
-                       + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
-                       + "-O " + assembly_dir
+                       + "-t Trinity-GG.fasta"
+    #                   + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
+    #                   + "-O " + assembly_dir
     predict_orf_cmd = "TransDecoder.Predict " \
                       + "-G Mitochondrial-Invertebrates " \
-                      + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
-                      + "-O " + assembly_dir
+                      + "-t Trinity-GG.fasta"
+    #                   + "-t " + os.path.join(assembly_dir, "Trinity-GG.fasta") + " " \
+    #                   + "-O " + assembly_dir
 
     os.chdir(assembly_dir)
     print(assembly_dir)
-    for cmd in [assembly_cmd, identify_orf_cmd, predict_orf_cmd]:
+    for cmd in [identify_orf_cmd, predict_orf_cmd]:
+        print(os.getcwd())
         out = sp.run(
             cmd,
             shell=True,

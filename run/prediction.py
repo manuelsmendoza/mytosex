@@ -68,6 +68,9 @@ plot_data = {
 plot_data = pd.DataFrame.from_dict(plot_data)
 plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
 
+print(plot_data)
+sys.exit()
+
 male_res = samples_info[samples_info["sex"] == "Male"]
 male_x = np.array(male_res.loc[:, "mtmcov"] / male_res.loc[:, "mtfcov"])
 male_y = np.array((male_res.loc[:, "mtmgi"] * male_res.loc[:, "mtmmd"]) /

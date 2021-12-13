@@ -10,7 +10,7 @@ from src.func_analysis import *
 from src.func_setup import load_settings
 from src.func_util import tnow, pass_file
 from sklearn.preprocessing import StandardScaler
-from keras.models import Sequential, save_model
+from keras.models import Sequential, save_model, load_model
 from keras.layers import Dense
 from tensorflow import keras
 
@@ -19,28 +19,30 @@ settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
 tmp_dir = os.path.join(settings["output_dir"], "tmp")
 data_dir = os.path.join(settings["output_dir"], "data")
 figs_dir = os.path.join(settings["output_dir"], "figures")
+model_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model")
 
 
-print(tnow() + " INFO: Building the neural network", file=sys.stdout)
-data_reference = pd.read_csv(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
-    sep="\t"
-)
-data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
-
-model = Sequential()
-model.add(Dense(6, activation='relu', input_dim=6))
-model.add(Dense(3, activation='relu'))
-model.add(Dense(3, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
-samples_sex = data_reference.loc[:, "sex"]
-model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
-model.save(os.path.join(data_dir, "nn_model"), save_format="h5")
+# print(tnow() + " INFO: Building the neural network", file=sys.stdout)
+# data_reference = pd.read_csv(
+#     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
+#     sep="\t"
+# )
+# data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
+#
+# model = Sequential()
+# model.add(Dense(6, activation='relu', input_dim=6))
+# model.add(Dense(6, activation='relu'))
+# model.add(Dense(3, activation='relu'))
+# model.add(Dense(1, activation='sigmoid'))
+# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+#
+# metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
+# samples_sex = data_reference.loc[:, "sex"]
+# model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
+# model.save(os.path.join(data_dir, "nn_model.h5"), save_format="h5")
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
+model = load_model(os.path.join(model_dir, "nn_model.h5"))
 align_metrics = pd.read_csv(
     os.path.join(data_dir, "align_stats.tsv"),
     delimiter="\t"

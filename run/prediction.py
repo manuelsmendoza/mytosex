@@ -57,7 +57,7 @@ for pred in sex_prediction:
     if pred is np.NaN:
         prediction_val.append(pred)
     else:
-        prediction_val.append(int(pred.round()))
+        prediction_val.append(pred.round())
 
 results = {"sample": samples_name, "sex": prediction_val}
 results = pd.DataFrame.from_dict(results)

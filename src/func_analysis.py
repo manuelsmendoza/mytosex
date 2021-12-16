@@ -258,3 +258,20 @@ def alignment_stats(coverage, feat_coverage, depth, salias, ralias):
     align_stats = pd.DataFrame.from_dict(align_stats)
 
     return align_stats
+
+
+def sex_round(x):
+    """ Round the sex prediction index
+
+    Parameters
+    ----------
+    x : int
+
+    Returns
+    ----------
+    Round x
+    """
+    if x is np.nan:
+        return np.nan
+    else:
+        return int(x.round())

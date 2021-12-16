@@ -51,7 +51,8 @@ align_metrics = pd.read_csv(
 samples_name = list(align_metrics.loc[:, "sample"])
 samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 sex_prediction = model.predict(samples_info)
-sex_prediction = [int(x.round()) for x in sex_prediction]
+sex_prediction = [sex_round(x) for x in sex_prediction]
+#sex_prediction = [int(x.round()) for x in sex_prediction]
 
 results = {"sample": samples_name, "sex": sex_prediction}
 results = pd.DataFrame.from_dict(results)

@@ -53,7 +53,10 @@ samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfg
 sex_prediction = model.predict(samples_info)
 pred_value = []
 for pred in sex_prediction:
-    print(pred[0])
+    if pred[0] == np.nan:
+        pred_value.append(np.nan)
+    else:
+        pred_value.append(int(pred[0].round()))
 #sex_prediction = [int(x.round()) for x in sex_prediction]
 
 results = {"sample": samples_name, "sex": sex_prediction}

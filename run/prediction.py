@@ -51,13 +51,9 @@ align_metrics = pd.read_csv(
 samples_name = list(align_metrics.loc[:, "sample"])
 samples_info = align_metrics.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 sex_prediction = model.predict(samples_info)
-pred_value = []
-for pred in sex_prediction:
-    if pred[0] is np.nan:
-        print("NaN")
-    print(pred)
+sex_prediction = [x[0] for x in sex_prediction]
 #sex_prediction = [int(x.round()) for x in sex_prediction]
-sex_prediction = np.array(pred_value)
+print(sex_prediction)
 
 results = {"sample": samples_name, "sex": sex_prediction}
 results = pd.DataFrame.from_dict(results)

@@ -58,6 +58,9 @@ for pred in sex_prediction:
     else:
         pred_value.append(int(pred[0].round()))
 #sex_prediction = [int(x.round()) for x in sex_prediction]
+print(pred_value)
+sex_prediction = np.array(pred_value)
+print(sex_prediction)
 
 results = {"sample": samples_name, "sex": sex_prediction}
 results = pd.DataFrame.from_dict(results)

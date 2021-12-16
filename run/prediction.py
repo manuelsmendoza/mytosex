@@ -57,11 +57,9 @@ for pred in sex_prediction:
     if pred is np.NaN:
         prediction_val.append(pred)
     else:
-        prediction_val.append(pred.round())
-print(prediction_val)
-#sex_prediction = [int(x.round()) for x in sex_prediction]
+        prediction_val.append(int(pred.round()))
 
-results = {"sample": samples_name, "sex": sex_prediction}
+results = {"sample": samples_name, "sex": prediction_val}
 results = pd.DataFrame.from_dict(results)
 results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
 results.to_csv(

@@ -13,6 +13,11 @@ from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential, save_model, load_model
 from keras.layers import Dense
 from tensorflow import keras
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+import umap.umap_ as umap
 
 
 settings = load_settings(os.getenv("MYTOSEX_SETTINGS"))
@@ -28,21 +33,22 @@ model_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 #     sep="\t"
 # )
 # data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
-#
+
 # model = Sequential()
 # model.add(Dense(6, activation='relu', input_dim=6))
-# model.add(Dense(6, activation='relu'))
 # model.add(Dense(3, activation='relu'))
 # model.add(Dense(1, activation='sigmoid'))
 # model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 #
+# data_reference = pd.read_csv(os.path.join(model_dir, "data.tsv"), delimiter="\t")
+# data_reference["sex"].replace({"Female": 0, "Male": 1}, inplace=True)
 # metrics_values = data_reference.loc[:, ["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]]
 # samples_sex = data_reference.loc[:, "sex"]
-# model.fit(metrics_values, samples_sex, epochs=250, batch_size=10, verbose=0)
+# model.fit(metrics_values, samples_sex, epochs=250, batch_size=10)
 # model.save(os.path.join(data_dir, "nn_model.h5"), save_format="h5")
 
 print(tnow() + " INFO: Inferring the sex of the samples", file=sys.stdout)
-model = load_model(os.path.join(model_dir, "nn_model.h5"))
+model = load_model(os.path.join(model_dir, "med_model"))
 align_metrics = pd.read_csv(
     os.path.join(data_dir, "align_stats.tsv"),
     delimiter="\t"
@@ -62,6 +68,19 @@ for pred in sex_prediction:
 results = {"sample": samples_name, "sex": prediction_val}
 results = pd.DataFrame.from_dict(results)
 results["sex"].replace({0: "Female", 1: "Male"}, inplace=True)
+
+# Add sexual index
+results["sindex"] = align_metrics.loc[:, "mtmcov"] / align_metrics.loc[:, "mtfcov"]
+
+# Dimension reduction
+reducer = umap.UMAP()
+dim_data = align_metrics[["mtfcov", "mtmcov", "mtfmd", "mtmmd", "mtfgi", "mtmgi"]].values
+scaled_dim_data = StandardScaler().fit_transform(dim_data)
+embedding = reducer.fit_transform(scaled_dim_data)
+embedding = pd.DataFrame(embedding)
+results["umapx"] = embedding.iloc[:, 0]
+results["umapy"] = embedding.iloc[:, 1]
+
 results.to_csv(
     os.path.join(settings["output_dir"], "results.tsv"),
     sep="\t",

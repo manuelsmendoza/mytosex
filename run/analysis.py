@@ -106,11 +106,18 @@ for sample in list(settings["samples"].keys()):
         )
 
     print(tnow() + " INFO: Extracting alignment statistics of " + settings["samples"][sample]["alias"], file=sys.stdout)
-    extract_stats(
-        alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
-        features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
-        threads=settings["numb_threads"]
-    )
+    if os.path.getsize(os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam")) > 0:
+        extract_stats(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
+            threads=settings["numb_threads"]
+        )
+    else:
+        extract_stats(
+            alignment=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".markdup.bam"),
+            features=os.path.join(tmp_dir, settings["reference"]["alias"] + ".bed"),
+            threads=settings["numb_threads"]
+        )
 
     sample_stats = alignment_stats(
             coverage=os.path.join(tmp_dir, settings["samples"][sample]["alias"] + ".cov.tsv"),

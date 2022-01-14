@@ -2,16 +2,28 @@ numb_threads: 32
 max_memory: 8
 output_dir: '/path/output_directory'
 reference:
-  alias: 'mga'
-  mtf: 'AY497292'
-  mtm: 'AY363687'
+  alias: 'med'
+  mtf: 'MF407676'
+  mtm: 'HM489874'
 samples:
   sample_01:
-    alias: 'LOLA_Gill'
-    accession: 'ERR4296979'
+    alias: 'MedF45'
+    accession: 'SRR9872845'
   sample_02:
-    alias: 'LOLA_Digestive'
-    accession: 'ERR4296980'
+    alias: 'MedF49'
+    accession: 'SRR9872849'
+  sample_03:
+    alias: 'MedF52'
+    accession: 'SRR9872852'
+  sample_04:
+    alias: 'MedM31'
+    accession: 'SRR9872831'
+  sample_05:
+    alias: 'MedM37'
+    accession: 'SRR9872837'
+  sample_06:
+    alias: 'MedM40'
+    accession: 'SRR9872840'
 other_spp:
   specie_01:
     alias: 'rph'
@@ -30,9 +42,9 @@ other_spp:
     mtf: 'GU001953'
     mtm: 'GU001954'
   specie_05:
-    alias: 'med'
-    mtf: 'MF407676'
-    mtm: 'HM489874'
+    alias: 'mga'
+    mtf: 'AY497292'
+    mtm: 'AY363687'
   specie_06:
     alias: 'cgi'
     mt: 'MZ497416'

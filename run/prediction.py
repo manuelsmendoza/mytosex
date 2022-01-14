@@ -12,6 +12,7 @@ from src.func_util import tnow, pass_file
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential, save_model, load_model
 from keras.layers import Dense
+from keras.utils.vis_utils import plot_model
 from tensorflow import keras
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split

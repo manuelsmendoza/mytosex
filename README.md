@@ -27,7 +27,10 @@ This tool can be installed as follows.
 git clone https://github.com/manuelsmendoza/mytosex.git
 
 # Create the conda environment
-cd mytosex && conda env create --file environment.yaml
+cd mytosex && conda create --name mytosex_test --file environment.txt 
+
+# Activate the environment
+conda activate mytosex_test 
 
 # Add it to the PATH
 export PATH=$PATH:$PWD

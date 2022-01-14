@@ -1,23 +1,22 @@
-numb_threads: 24
-max_memory: 32
-output_dir: '/mnt/netapp1/Store_uvibgmsm/analysis_med/sex_det'
+numb_threads: 32
+max_memory: 8
+output_dir: '/path/output_directory'
 reference:
-  alias: 'med'
-  mtf: 'MF407676'
-  mtm: 'HM489874'
+  alias: 'mga'
+  mtf: 'AY497292'
+  mtm: 'AY363687'
 samples:
   sample_01:
-    alias: 'ERR4859162_01'
-    accession: 'ERR4859162'
+    alias: 'LOLA_Gill'
+    accession: 'ERR4296979'
   sample_02:
-    alias: 'ERR4859162_02'
-    forward: '/path/reads_dir/ERR4859162_1.fastq.gz'
-    reverse: '/path/reads_dir/ERR4859162_2.fastq.gz'
+    alias: 'LOLA_Digestive'
+    accession: 'ERR4296980'
 other_spp:
   specie_01:
-    alias: 'mga'
-    mtf: 'AY497292'
-    mtm: 'AY363687'
+    alias: 'rph'
+    mtf: 'MT757748'
+    mtm: 'MT757749'
   specie_02:
     alias: 'mtr'
     mtf: 'GU936625'
@@ -31,9 +30,9 @@ other_spp:
     mtf: 'GU001953'
     mtm: 'GU001954'
   specie_05:
-    alias: 'rph'
-    mtf: 'MT757748'
-    mtm: 'MT757749'
+    alias: 'med'
+    mtf: 'MF407676'
+    mtm: 'HM489874'
   specie_06:
     alias: 'cgi'
     mt: 'MZ497416'

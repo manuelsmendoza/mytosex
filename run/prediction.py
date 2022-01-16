@@ -27,7 +27,6 @@ data_dir = os.path.join(settings["output_dir"], "data")
 figs_dir = os.path.join(settings["output_dir"], "figures")
 model_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model")
 
-
 # print(tnow() + " INFO: Building the neural network", file=sys.stdout)
 # data_reference = pd.read_csv(
 #     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "data.tsv"),
@@ -87,37 +86,5 @@ results.to_csv(
     sep="\t",
     index=False
 )
-
-plot_data = {
-    "x_value": np.array(samples_info.loc[:, "mtmcov"] / samples_info.loc[:, "mtfcov"]),
-    "y_value": np.array((samples_info.loc[:, "mtmgi"] * samples_info.loc[:, "mtmmd"]) /
-                        (samples_info.loc[:, "mtfgi"] * samples_info.loc[:, "mtfmd"])),
-    "sexpred": sex_prediction
-}
-plot_data = pd.DataFrame.from_dict(plot_data)
-plot_data["sexpred"].replace({"Female": 0, "Male": 1}, inplace=True)
-
-sns.scatterplot(
-    data=plot_data,
-    x="x_value",
-    y="y_value",
-    hue="sexpred")
-# male_res = samples_info[samples_info["sex"] == "Male"]
-# male_x = np.array(male_res.loc[:, "mtmcov"] / male_res.loc[:, "mtfcov"])
-# male_y = np.array((male_res.loc[:, "mtmgi"] * male_res.loc[:, "mtmmd"]) /
-#                   (male_res.loc[:, "mtfgi"] * male_res.loc[: , "mtfmd"]))
-# male_c = np.repeat(1, male_res.shape[0])
-# female_res = samples_info[samples_info["sex"] == "Female"]
-#
-#
-#
-# fig, ax = plt.subplots()
-# ax.scatter(plot_data.loc[:, "x_value"], plot_data.loc[:, "y_value"], c=plot_data.loc[:, "sexpred"])
-# yellow_patch = mpatches.Patch(color="yellow", label="Male")
-# purple_patch = mpatches.Patch(color="Purple", label="Female")
-# ax.legend(handles=[yellow_patch, purple_patch])
-# plt.xlabel("Coverage")
-# plt.ylabel("Sequencing depth")
-plt.savefig(os.path.join(figs_dir, "clust_prediction.svg"))
 
 open(os.path.join(settings["output_dir"], ".prediction.ok"), "w").close()

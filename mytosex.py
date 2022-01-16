@@ -66,6 +66,9 @@ def main():
         print(tnow() + " WARN: Skipping phylogenetic analysis", file=sys.stdout)
 
     sh.rmtree(os.path.join(settings["output_dir"], "tmp"))
+    sh.rmtree(os.path.join(settings["output_dir"], "figures"))
+    sh.rmtree(os.path.join(settings["output_dir"], "data", "tree"))
+    os.remove(os.path.join(settings["output_dir"], "settings.yaml"))
     print(tnow() + " INFO: Analysis finished", file=sys.stdout)
     sys.exit()
 

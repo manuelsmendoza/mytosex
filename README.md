@@ -1,22 +1,21 @@
 # Description
-`MyToSex` is  a novel tool for *in silico* sex determination based on the mitochondrial genomes content. 
-Some mussels and clams species have an unusual system of mitochondrial inheritance termed double uniparental 
-inheritance, which involves the transmission of two different sex-associated mitogenomes haplotypes to the offspring.
-Females contain only F-type mitogenomes (mtF) whereas males carry both haplotypes mtF, and also M-type (mtM). This
-tools works in three acts:
-
-1. **Mitogenomes detection and quantification**: To detect the mitogenomes presence, we mapped all the reads to both 
-   mitotypes of reference. Afterward, we calculate the mitogenomes coverage, sequencing depth and depth uniformity.
-
+`MyToSex` is a novel tool for in silico sex determination based on the content of the mitochondrial genome. Some 
+mussels and clams species have a different system of mitochondrial inheritance termed double uniparental inheritance, 
+which involves the transmission of two different sex-associated mitogenomes haplotypes to the offspring. Females 
+contain only F-type mitogenomes (mtF), whereas males carry mtF and M-type (mtM) haplotypes. This tool works 
+in three acts:
+1. **Mitogenomes detection and quantification**: We mapped all the reads to both mitotypes of reference to detect the 
+   mitogenomes presence. Afterwards, we calculate the mitogenomes coverage, sequencing depth and depth uniformity.
 2. **Sex prediction**: We implemented an artificial neural network that takes those three parameters of each mitogenome 
    as input to predict the sex of the sample.
-
-3. **Supporting analysis**: We also implemented two additional analyses to complement and bring more support the 
-   results.
-   1. We clustered the samples applying dimensional reduction techniques to verify if the resultant clustering agree 
-      with the prediction.
-   2. We use the reads mapped to the mitogenomes to assemble *de novo* the mitogenes and after annotated them, we 
+3. **Supporting analysis**: We also implemented three additional analyses to complement and bring more support to the 
+   results. 
+   1. We clustered the samples applying dimensional reduction techniques to verify if the resultant groups agree 
+      with the prediction. 
+   2. We used the reads mapped to the mitogenomes to assemble *de novo* the mitogenes, and after annotating them, we 
       performed a phylogenetic analysis building the different gene trees.
+   3. We calculate a sexual index based on the detection of both mitotypes that can supply more support or complement 
+      the prediction done by the ANN.
 
 # Installation and use
 `MyToSex` is an open-source tools written in [Python3](https://www.python.org) that requires multiple modules.
@@ -31,14 +30,12 @@ cd mytosex && conda create --name mytosex_test --file environment.txt
 
 # Activate the environment
 conda activate mytosex_test 
-
-# Add it to the PATH
-export PATH=$PATH:$PWD
 ```
 
-To use this tools, create a file containing the information required for the analysis and pass it as positional 
-argument as we have specified below. To see more information about the settings file, check it in the 
+To use MyToSex, create a file containing the information required for the analysis and pass it as a positional argument 
+as we have specified below. To see more information about the settings file, check it in the
 [wiki](https://github.com/manuelsmendoza/mytosex/wiki).
+
 ```shell
 python3 mytosex.py settings.yaml
 ```
@@ -55,6 +52,10 @@ This tool was tested with the following resources:
   - CPU: AMD Ryzen 9 3950X (32) @ 3.500GHz
   - GPU: AMD ATI 10:00.0 Device 731f 
   - Memory: 697MiB / 32041MiB
+
+> **Note**: The alignments consume much space in the disk (150GB per sample approx. in some cases). Please, check if 
+> you have enough space available for the analysis. To run the example proposed, you will need 650GB. However, after 
+> removing the temporal files, the final output will have less than 100BM.
 
 # Citation
 If you only use `MyToSex` cite us as follows:

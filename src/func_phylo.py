@@ -352,7 +352,9 @@ def build_tree(msa_file, out_pref, threads):
     cmd = cmd.replace("  ", "")
     cmd = cmd + " " \
           + "--all " \
-          + "--threads " + str(threads)
+          + "--threads " + str(threads) + " " \
+          + "--bootstrap " \
+          + "--bs-trees 1000"
 
     out = sp.run(
         cmd,
